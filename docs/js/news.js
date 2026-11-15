@@ -4,7 +4,16 @@
 import { dialog } from './ui.js?v=0.2.0';
 
 export const NEWS = [
-  // Beispiel: { v: '0.2.0', title: 'Runden und Termine', items: ['…'] },
+  {
+    v: '0.2.0', title: 'Griechenland ist da',
+    items: [
+      'Auf der Startseite seht ihr die <strong>drei Griechenland-Abende</strong>. Tippt einen an für Menü, Fotos, Sprüche und Eindrücke.',
+      '<strong>Fotos</strong> und <strong>Sprüche</strong> gehen mit einem Tipp. Ohne Netz warten die Fotos und werden später hochgeladen.',
+      '<strong>Viele Fotos auf einmal</strong>: Die App sortiert sie nach Aufnahmetag selbst dem richtigen Abend zu.',
+      'Gastgeber tragen das Menü ein und tippen am Abend auf <strong>Menü freigeben</strong>. Bis dahin bleibt es geheim.',
+      '<strong>Ideen für Griechenland</strong> je Gang, jeweils mit einer Variante für Kinder.',
+    ],
+  },
 ];
 
 const num = (v) => (v || '0').split('.').map(Number);

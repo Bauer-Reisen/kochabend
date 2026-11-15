@@ -1,9 +1,9 @@
 // Startseite: die laufende Runde mit ihren drei Abenden, der aktuelle Abend groß.
-import { VERSION, APP_NAME } from './config.js?v=0.2.3';
-import { esc } from './ui.js?v=0.2.3';
-import { ctx, me, coupleName, fmtDate, fmtShort, todayIso, currentEvening } from './ctx.js?v=0.2.3';
-import { kueche } from './kuechen.js?v=0.2.3';
-import { ornament } from './ornament.js?v=0.2.3';
+import { VERSION, APP_NAME } from './config.js?v=0.3.0';
+import { esc } from './ui.js?v=0.3.0';
+import { ctx, me, coupleName, fmtDate, fmtShort, todayIso, currentEvening } from './ctx.js?v=0.3.0';
+import { kueche } from './kuechen.js?v=0.3.0';
+import { ornament } from './ornament.js?v=0.3.0';
 
 const standalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
 const isIos = () => /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -65,6 +65,11 @@ export function renderHome(view) {
           </ol>
           <a class="link" href="#/ideen/${esc(round.kueche)}">Ideen für ${esc(round.name)} – was kocht man dort?</a>
         </section>` : '<div class="card"><p>Noch keine Runde angelegt.</p></div>'}
+      <a class="card home-book" href="#/tagebuch">
+        <p class="kicker">📖</p>
+        <h3>Unser Tagebuch</h3>
+        <p class="muted">Alle Länder und Abende zum Durchblättern</p>
+      </a>
       <div class="card sort-card">
         <h3>Viele Fotos auf einmal</h3>
         <p>Wähle einfach alle Fotos aus – die App ordnet sie nach Aufnahmetag dem richtigen Abend zu.</p>

@@ -10,6 +10,7 @@ export const KUECHEN = {
     flagge: 'gr',
     farben: ['#24527a', '#f4efe3', '#8fb3cf'],
     motiv: 'Olivenzweig',
+    musik: 'Griechische Musik',
     ideen: {
       vor: [
         { id: 'gr-tzatziki', name: 'Tzatziki mit warmem Pita', orig: 'Tzatzíki', auch: ['Zaziki'], text: 'Joghurt, Gurke, Knoblauch, Olivenöl – kalt und frisch, dazu Brot vom Grill.', kids: 'Eine Schale ohne Knoblauch abfüllen, bevor er dazukommt. Pita in Streifen als Dip-Stangen.' },

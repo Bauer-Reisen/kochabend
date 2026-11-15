@@ -1,9 +1,17 @@
 // „Was ist neu?" – nach einem Update einmal, wenn man die App wieder öffnet.
 // Wer die App neu hat, bekommt stattdessen den Rundgang und sieht die alten Neuigkeiten nicht.
 // Neueste zuerst; nur Änderungen, die man sieht und kennen sollte (keine Reparaturen).
-import { dialog } from './ui.js?v=0.2.3';
+import { dialog } from './ui.js?v=0.3.0';
 
 export const NEWS = [
+  {
+    v: '0.3.0', title: 'Das Tagebuch ist da',
+    items: [
+      'Auf der Startseite: <strong>Unser Tagebuch</strong>. Jedes Land ist ein Kapitel, jeder Abend eine Seite mit Titelfoto, Menü, Sprüchen und Fotos.',
+      'Das Titelfoto wählen die Gastgeber (in der Großansicht ☆). Sonst nimmt die App das Foto mit den meisten Herzen.',
+      '<strong>Musik</strong>: Auf jeder Abend-Seite öffnet ein Knopf passende Musik direkt in Spotify. Eure eigene Playlist könnt ihr dort als Link ablegen.',
+    ],
+  },
   {
     v: '0.2.3', title: 'Mehr Ideen',
     items: [

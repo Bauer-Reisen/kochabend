@@ -1,9 +1,9 @@
 // Seite eines Abends: Menü, Kinder, Fotos, Sprüche, Eindrücke.
-import * as api from './api.js?v=0.2.3';
-import { esc, dialog, toast } from './ui.js?v=0.2.3';
-import { ctx, me, personName, coupleName, kidsOf, agesText, fmtDate, eveningForTime, roundOf } from './ctx.js?v=0.2.3';
-import { kueche, GANG, findIdee } from './kuechen.js?v=0.2.3';
-import { addPhotos, readTakenTime, qAll, onQueueChange } from './photos.js?v=0.2.3';
+import * as api from './api.js?v=0.3.0';
+import { esc, dialog, toast } from './ui.js?v=0.3.0';
+import { ctx, me, personName, coupleName, kidsOf, agesText, fmtDate, eveningForTime, roundOf } from './ctx.js?v=0.3.0';
+import { kueche, GANG, findIdee } from './kuechen.js?v=0.3.0';
+import { addPhotos, readTakenTime, qAll, onQueueChange } from './photos.js?v=0.3.0';
 
 const linkify = (s) => esc(s).replace(/https?:\/\/[^\s<]+/g, (u) => `<a href="${u}" target="_blank" rel="noopener">${u.length > 40 ? u.slice(0, 38) + '…' : u}</a>`).replace(/\n/g, '<br>');
 
@@ -38,6 +38,11 @@ export async function renderEvening(view, id, action, reload) {
       <section class="block" id="menu">
         <h2>Menü</h2>
         ${menuSection(ev, round)}
+      </section>
+
+      <section class="block" id="musik">
+        <h2>Musik</h2>
+        ${musicSection(ev, round, k)}
       </section>
 
       <section class="block" id="fotos">
@@ -158,6 +163,26 @@ function menuSection(ev, round) {
   }).filter(Boolean).join('<div class="menu-sep" aria-hidden="true">✦</div>')}</div>`;
 }
 
+// ---------- Musik ----------
+// Kein Spotify-Login in der App: Ein Knopf öffnet direkt die Spotify-App,
+// und wer mag, legt den Link einer eigenen Playlist hier ab.
+const mobile = () => /iPhone|iPad|iPod|Android/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+export const spotifySearch = (q) => (mobile()
+  ? `spotify:search:${encodeURIComponent(q)}`
+  : `https://open.spotify.com/search/${encodeURIComponent(q)}/playlists`);
+export const musicLabel = (url) => (/spotify/.test(url) ? 'Spotify' : /youtu/.test(url) ? 'YouTube' : /apple/.test(url) ? 'Apple Music' : 'Link');
+
+function musicSection(ev, round, k) {
+  const m = data.music;
+  const q = k.musik || `${round.name || ''} Musik`;
+  return `
+    ${m ? `
+      <a class="btn btn-primary btn-wide" href="${esc(m.url)}" target="_blank" rel="noopener">▶ Unsere Playlist (${musicLabel(m.url)})</a>
+      <p class="hint center">eingetragen von ${esc(personName(m.updated_by))} · <button type="button" class="link small" data-act="music">ändern</button></p>` : ''}
+    <a class="btn btn-wide ${m ? '' : 'btn-primary'}" href="${esc(spotifySearch(q))}" target="_blank" rel="noopener">🎵 ${esc(q)} auf Spotify</a>
+    ${m ? '' : '<p class="center"><button type="button" class="link small" data-act="music">Eigene Playlist eintragen</button></p>'}`;
+}
+
 // ---------- Ereignisse ----------
 function wire(view, ev, round, reload) {
   const my = me();
@@ -235,6 +260,23 @@ function wire(view, ev, round, reload) {
   });
 
   on('[data-photo]', (e) => lightbox(ev, Number(e.currentTarget.dataset.photo), reload));
+
+  // Musik
+  on('[data-act=music]', async () => {
+    const r = await dialog({
+      title: 'Eure Playlist',
+      body: `<p>In Spotify bei der Playlist auf <strong>···</strong> → <strong>Teilen</strong> → <strong>Link kopieren</strong> tippen und hier einfügen.</p>
+        <input type="text" name="url" value="${esc(data.music?.url || '')}" placeholder="https://open.spotify.com/…" autocapitalize="none" spellcheck="false">`,
+      buttons: [
+        ...(data.music ? [{ label: 'Entfernen', value: 'del' }] : []),
+        { label: 'Abbrechen', value: 'no' },
+        { label: 'Speichern', value: 'ok', primary: true },
+      ],
+    });
+    if (!r || r.value === 'no') return;
+    const url = r.value === 'del' ? '' : (r.fields.url || '');
+    if (await guard(() => api.setMusic(ev.id, url))) { toast(url ? 'Playlist gespeichert' : 'Playlist entfernt'); reload(); }
+  });
 
   // Sprüche
   on('[data-act=quote]', () => addQuoteDialog(ev, reload));

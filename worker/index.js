@@ -10,6 +10,7 @@ const TOKEN_DAYS = 400;        // Ausweis gilt gut ein Jahr
 const MAX_PHOTOS_PER_DAY = 400; // Bremse gegen versehentliches Massen-Hochladen (alle zusammen)
 const MAX_BIG = 3_000_000;     // Bytes je großes Foto (die App schickt ca. 300 KB)
 const MAX_SMALL = 400_000;
+const MUSIC_HOSTS = ['open.spotify.com', 'spotify.link', 'music.youtube.com', 'www.youtube.com', 'youtube.com', 'youtu.be', 'music.apple.com'];
 const KINDS = ['vor', 'haupt', 'nach'];
 
 export default {
@@ -138,6 +139,7 @@ export default {
             photos,
             quotes: await all('SELECT id, text, said_by, by_person AS by, created FROM quotes WHERE evening_id = ? ORDER BY created', ev.id),
             impressions: await all('SELECT person_id AS person, text, updated FROM impressions WHERE evening_id = ? ORDER BY updated', ev.id),
+            music: await one('SELECT url, updated_by FROM music WHERE evening_id = ?', ev.id),
           });
         }
 
@@ -191,6 +193,23 @@ export default {
           if (!isHost) return reply(403, { error: 'Das Titelbild wählen die Gastgeber.' });
           const body = await request.json();
           await run('UPDATE evenings SET cover_photo = ? WHERE id = ?', body.photo || null, ev.id);
+          return reply(200, { ok: true });
+        }
+
+        // Musik: Playlist-Link (alle dürfen; nur bekannte Musikdienste, leer = löschen)
+        if (action === 'music' && method === 'PUT') {
+          const body = await request.json();
+          const raw = clip(body.url, 500).trim();
+          if (!raw) { await run('DELETE FROM music WHERE evening_id = ?', ev.id); return reply(200, { ok: true }); }
+          const found = /https:\/\/\S+/.exec(raw); // Link aus einem geteilten Text herausziehen
+          let u = null;
+          try { u = new URL(found ? found[0] : raw); } catch { /* unten */ }
+          if (!u || u.protocol !== 'https:' || !MUSIC_HOSTS.includes(u.hostname)) {
+            return reply(400, { error: 'Das ist kein Link von Spotify, YouTube oder Apple Music.' });
+          }
+          await run(`INSERT INTO music (evening_id, url, updated_by, updated) VALUES (?, ?, ?, ?)
+            ON CONFLICT (evening_id) DO UPDATE SET url = excluded.url, updated_by = excluded.updated_by, updated = excluded.updated`,
+            ev.id, u.href, me.id, Date.now());
           return reply(200, { ok: true });
         }
 

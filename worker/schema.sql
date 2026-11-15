@@ -130,3 +130,11 @@ INSERT OR IGNORE INTO evenings (id, round_id, nr, date, host, released) VALUES
 UPDATE couples SET name = 'Mareike & Marco' WHERE id = 'marco-mareike';
 UPDATE persons SET sort = 1 WHERE id = 'mareike';
 UPDATE persons SET sort = 2 WHERE id = 'marco';
+
+-- Musik: Playlist-Link je Abend (Spotify, YouTube, Apple Music)
+CREATE TABLE IF NOT EXISTS music (
+  evening_id TEXT PRIMARY KEY REFERENCES evenings(id),
+  url        TEXT NOT NULL,
+  updated_by TEXT,
+  updated    INTEGER
+);

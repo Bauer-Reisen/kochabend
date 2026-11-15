@@ -1,16 +1,16 @@
 // Einstieg der App: Code eingeben → Name wählen → Seiten (Startseite, Abend, Ideen, Einsortieren).
-import { VERSION } from './config.js?v=0.2.2';
-import { store, login, loggedIn, logout, getPeople, getState, ApiError } from './api.js?v=0.2.2';
-import { esc, dialog, toast } from './ui.js?v=0.2.2';
-import { runTour } from './tour.js?v=0.2.2';
-import { unseen, showNews, NEWS } from './news.js?v=0.2.2';
-import { ctx, me } from './ctx.js?v=0.2.2';
-import { ornament } from './ornament.js?v=0.2.2';
-import { renderHome } from './home.js?v=0.2.2';
-import { renderEvening } from './evening.js?v=0.2.2';
-import { renderIdeas } from './ideas.js?v=0.2.2';
-import { renderSort } from './sort.js?v=0.2.2';
-import { qAll, onQueueChange, flush } from './photos.js?v=0.2.2';
+import { VERSION } from './config.js?v=0.2.3';
+import { store, login, loggedIn, logout, getPeople, getState, ApiError } from './api.js?v=0.2.3';
+import { esc, dialog, toast } from './ui.js?v=0.2.3';
+import { runTour } from './tour.js?v=0.2.3';
+import { unseen, showNews, NEWS } from './news.js?v=0.2.3';
+import { ctx, me } from './ctx.js?v=0.2.3';
+import { ornament } from './ornament.js?v=0.2.3';
+import { renderHome } from './home.js?v=0.2.3';
+import { renderEvening } from './evening.js?v=0.2.3';
+import { renderIdeas } from './ideas.js?v=0.2.3';
+import { renderSort } from './sort.js?v=0.2.3';
+import { qAll, onQueueChange, flush } from './photos.js?v=0.2.3';
 
 const view = document.getElementById('view');
 
@@ -97,7 +97,7 @@ async function route(fresh = false) {
     if (fresh || !ctx.state) ctx.state = await getState();
     const [, page, a, b, c] = (location.hash || '#/').split('/');
     if (page === 'abend' && a) await renderEvening(view, a, b, (refreshState) => reloadEvening(a, refreshState));
-    else if (page === 'ideen' && a) renderIdeas(view, a, b || '', c || '');
+    else if (page === 'ideen' && a) await renderIdeas(view, a, b || '', c || '');
     else if (page === 'einsortieren') renderSort(view);
     else { renderHome(view); wireHome(); }
     queueBanner();

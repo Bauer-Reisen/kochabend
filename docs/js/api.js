@@ -1,5 +1,5 @@
 // Verbindung zum Worker. Der Ausweis (Token) liegt nur auf diesem Handy.
-import { API } from './config.js?v=0.2.2';
+import { API } from './config.js?v=0.2.3';
 
 const KEY = 'kochabend.';
 export const store = {
@@ -55,6 +55,7 @@ export const logout = () => { store.set('token', null); store.set('person', null
 export const getPeople = () => call('/api/people');
 export const getState = () => call('/api/state');
 export const getEvening = (id) => call(`/api/evening/${id}`);
+export const getCooked = (kueche) => call(`/api/cooked?kueche=${encodeURIComponent(kueche)}`);
 export const saveCourses = (id, courses) => call(`/api/evening/${id}/courses`, { method: 'PUT', body: { courses } });
 export const setReleased = (id, released) => call(`/api/evening/${id}/release`, { method: 'POST', body: { released } });
 export const setDate = (id, date) => call(`/api/evening/${id}/date`, { method: 'PUT', body: { date } });

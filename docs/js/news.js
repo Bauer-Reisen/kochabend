@@ -1,9 +1,16 @@
 // „Was ist neu?" – nach einem Update einmal, wenn man die App wieder öffnet.
 // Wer die App neu hat, bekommt stattdessen den Rundgang und sieht die alten Neuigkeiten nicht.
 // Neueste zuerst; nur Änderungen, die man sieht und kennen sollte (keine Reparaturen).
-import { dialog } from './ui.js?v=0.2.2';
+import { dialog } from './ui.js?v=0.2.3';
 
 export const NEWS = [
+  {
+    v: '0.2.3', title: 'Mehr Ideen',
+    items: [
+      'Für Griechenland gibt es jetzt <strong>fast 50 Ideen</strong>. Unter jedem Gang zeigt „Noch … Ideen zeigen“ den Rest.',
+      'Was in dieser Runde <strong>schon gekocht</strong> wurde, taucht in den Ideen nicht mehr auf. Ganz unten steht klein, was ausgeblendet ist.',
+    ],
+  },
   {
     v: '0.2.0', title: 'Griechenland ist da',
     items: [

@@ -91,6 +91,22 @@ export default {
         return reply(200, { rounds, evenings, attendance, today: today() });
       }
 
+      // ---------- Schon gekochte Gerichte einer Küche (für die Ideen) ----------
+      // Nur offene Menüs (freigegeben oder vergangen) und die eigenen – sonst würde ein geheimes Menü verraten.
+      if (path === '/api/cooked' && method === 'GET') {
+        const k = url.searchParams.get('kueche') || '';
+        const rows = await all(`
+          SELECT c.kind, c.name, c.idea_id, e.id AS evening, e.nr, e.host, e.date, e.released
+          FROM courses c JOIN evenings e ON e.id = c.evening_id JOIN rounds r ON r.id = e.round_id
+          WHERE r.kueche = ? AND c.name <> ''`, k);
+        const t = today();
+        return reply(200, {
+          cooked: rows
+            .filter((x) => x.released === 1 || (x.date && x.date < t) || x.host === me.couple)
+            .map(({ released, ...x }) => x),
+        });
+      }
+
       // ---------- Ein Abend ----------
       let m = /^\/api\/evening\/([\w-]+)(?:\/(\w+))?$/.exec(path);
       if (m) {

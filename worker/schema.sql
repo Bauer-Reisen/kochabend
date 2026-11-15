@@ -16,13 +16,13 @@ CREATE TABLE IF NOT EXISTS persons (
 );
 
 INSERT OR IGNORE INTO couples (id, name, sort) VALUES
-  ('marco-mareike', 'Marco & Mareike', 1),
+  ('marco-mareike', 'Mareike & Marco', 1),
   ('steffi-ali',    'Steffi & Ali',    2),
   ('clari-domi',    'Clari & Domi',    3);
 
 INSERT OR IGNORE INTO persons (id, name, couple_id, sort) VALUES
-  ('marco',   'Marco',   'marco-mareike', 1),
-  ('mareike', 'Mareike', 'marco-mareike', 2),
+  ('mareike', 'Mareike', 'marco-mareike', 1),
+  ('marco',   'Marco',   'marco-mareike', 2),
   ('steffi',  'Steffi',  'steffi-ali',    3),
   ('ali',     'Ali',     'steffi-ali',    4),
   ('clari',   'Clari',   'clari-domi',    5),
@@ -125,3 +125,8 @@ INSERT OR IGNORE INTO evenings (id, round_id, nr, date, host, released) VALUES
   ('e-gr-1', 'r-griechenland', 1, '2026-10-24', 'marco-mareike', 1),
   ('e-gr-2', 'r-griechenland', 2, '2026-11-21', 'steffi-ali', 0),
   ('e-gr-3', 'r-griechenland', 3, '2027-01-23', 'clari-domi', 0);
+
+-- 16.11.2026: Frauen zuerst nennen (Wunsch der Gruppe)
+UPDATE couples SET name = 'Mareike & Marco' WHERE id = 'marco-mareike';
+UPDATE persons SET sort = 1 WHERE id = 'mareike';
+UPDATE persons SET sort = 2 WHERE id = 'marco';

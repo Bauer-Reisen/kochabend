@@ -1,6 +1,6 @@
 {
   "name": "kochabend-app",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Kochabend-Tagebuch für drei Paare",
   "type": "module",

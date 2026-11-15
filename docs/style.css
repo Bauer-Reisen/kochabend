@@ -56,7 +56,10 @@ body {
 /* ---------- Schrift ---------- */
 .kicker { font-family: var(--f-hand); font-size: 1.5rem; color: var(--accent); margin: 0; line-height: 1; }
 .title { font-family: var(--f-title); font-weight: 600; font-size: clamp(2.6rem, 11vw, 3.4rem); line-height: 1.05; margin: .15em 0 0; letter-spacing: -.01em; }
-.title-sm { font-size: clamp(2rem, 8.5vw, 2.6rem); }
+.title-name { font-size: clamp(2.7rem, 12.5vw, 3.6rem); }
+.title-name .tn-small { font-style: italic; font-weight: 400; font-size: .55em; color: var(--accent); }
+.title-name .tn-line { display: block; font-style: italic; font-weight: 400; font-size: .5em; letter-spacing: .02em; color: var(--ink-soft); margin-top: .15em; }
+.title-sm {font-size: clamp(2rem, 8.5vw, 2.6rem); }
 h2, h3 { font-family: var(--f-title); font-weight: 600; line-height: 1.2; margin: 0 0 .4em; }
 h2 { font-size: 1.35rem; }
 h3 { font-size: 1.1rem; }

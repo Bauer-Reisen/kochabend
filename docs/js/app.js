@@ -1,9 +1,9 @@
 // Einstieg der App: Code eingeben → Name wählen → Startseite.
-import { VERSION, APP_NAME } from './config.js?v=0.1.0';
-import { store, login, loggedIn, logout, getPeople, ApiError } from './api.js?v=0.1.0';
-import { esc, dialog, toast } from './ui.js?v=0.1.0';
-import { runTour } from './tour.js?v=0.1.0';
-import { unseen, showNews, NEWS } from './news.js?v=0.1.0';
+import { VERSION, APP_NAME } from './config.js?v=0.1.1';
+import { store, login, loggedIn, logout, getPeople, ApiError } from './api.js?v=0.1.1';
+import { esc, dialog, toast } from './ui.js?v=0.1.1';
+import { runTour } from './tour.js?v=0.1.1';
+import { unseen, showNews, NEWS } from './news.js?v=0.1.1';
 
 const view = document.getElementById('view');
 let people = null; // { couples, persons } vom Worker
@@ -26,8 +26,8 @@ const ornament = `
 function showLogin(message = '') {
   view.innerHTML = `
     <section class="gate">
-      <p class="kicker">Unser Tagebuch</p>
-      <h1 class="title">${esc(APP_NAME)}</h1>
+      <p class="kicker">Unser Kochabend-Tagebuch</p>
+      <h1 class="title title-name"><span class="tn-small">In</span> 80 Küchen <span class="tn-line">um die Welt</span></h1>
       ${ornament}
       <p class="lead">Drei Paare, ein Land, drei Abende.</p>
       <form class="card form" id="login" novalidate>

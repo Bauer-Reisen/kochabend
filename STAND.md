@@ -1,9 +1,12 @@
-# Kochabend-App – Stand
+# „In 80 Küchen um die Welt" (Kochabend-App) – Stand
+
+App-Name seit 0.1.1: „In 80 Küchen um die Welt", auf dem Home-Bildschirm „80 Küchen". Repo und Worker heißen weiter „kochabend".
 
 Plan: siehe PLAN.md. Nach jedem Abschnitt: veröffentlichen, Link + Testpunkte nennen, auf Okay warten.
 
 ## Eingerichtet
-- Ordner `C:\Users\Steffi\Documents\Kochabend-App`, Git lokal (Branch main). GitHub-Repo: **noch nicht angelegt** (macht die Nutzerin: öffentlich, Pages aus Branch `main`, Ordner `/docs`). Adresse dann: https://bauer-reisen.github.io/kochabend/ (falls Repo „kochabend" heißt).
+- Ordner `C:\Users\Steffi\Documents\Kochabend-App`, GitHub-Repo https://github.com/Bauer-Reisen/kochabend (öffentlich, hochgeladen 15.11.2026). Pages: Branch `main`, Ordner `/docs` (stellt der Nutzer ein). Adresse: https://bauer-reisen.github.io/kochabend/
+- Zahlungsart bei Cloudflare hinterlegt (15.11.2026). R2 muss einmal im Dashboard aktiviert werden (wrangler meldet sonst Code 10042), danach legt Claude den Speicher `kochabend-fotos` an.
 - Worker online: https://kochabend.film-app.workers.dev (Version 3087fe0b). Erlaubt nur bauer-reisen.github.io und localhost:5800. 10 Code-Versuche pro Minute.
 - D1-Datenbank `kochabend` (438de803-…), Tabellen couples + persons mit den 6 Namen.
 - Secret `GROUP_CODE`: **noch nicht gesetzt** (macht die Nutzerin im Dashboard). Bis dahin antwortet der Worker „noch nicht eingerichtet". `/api/health` zeigt `code: true/false`.

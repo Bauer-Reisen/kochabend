@@ -1,7 +1,7 @@
 {
-  "name": "Kochabend",
-  "short_name": "Kochabend",
-  "description": "Unser Kochabend-Tagebuch",
+  "name": "In 80 Küchen um die Welt",
+  "short_name": "80 Küchen",
+  "description": "Unser Kochabend-Tagebuch: drei Paare, ein Land, drei Abende",
   "lang": "de",
   "id": "./",
   "start_url": "./",

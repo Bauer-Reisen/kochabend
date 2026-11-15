@@ -1,11 +1,11 @@
 // Das schöne Tagebuch: Titelseite mit allen Ländern, je Land ein Kapitel mit seinen Abenden.
 // Nur zum Anschauen – gesammelt wird auf den Abend-Seiten.
-import * as api from './api.js?v=0.3.0';
-import { esc } from './ui.js?v=0.3.0';
-import { ctx, personName, coupleName, fmtDate, todayIso } from './ctx.js?v=0.3.0';
-import { kueche, GANG, findIdee } from './kuechen.js?v=0.3.0';
-import { ornament } from './ornament.js?v=0.3.0';
-import { musicLabel } from './evening.js?v=0.3.0';
+import * as api from './api.js?v=0.3.1';
+import { esc } from './ui.js?v=0.3.1';
+import { ctx, personName, coupleName, fmtDate, todayIso, kidsOf, agesText } from './ctx.js?v=0.3.1';
+import { kueche, GANG, findIdee } from './kuechen.js?v=0.3.1';
+import { ornament } from './ornament.js?v=0.3.1';
+import { musicLabel } from './evening.js?v=0.3.1';
 
 const year = (iso) => (iso ? iso.slice(0, 4) : '');
 // leichte, aber feste Schräglage je Foto (sieht bei jedem Öffnen gleich aus)
@@ -87,6 +87,9 @@ function eveningPage(d, idx) {
   const rest = photos.filter((p) => p !== cover);
   const upcoming = !ev.date || ev.date >= t;
   const hasCourses = d.courses.some((c) => c.name);
+  // Kinder dabei? (Alter so, wie es an dem Abend war)
+  const kids = d.attendance.filter((a) => a.with_kids === 1 && kidsOf(a.couple).length)
+    .map((a) => `${coupleName(a.couple)} (${agesText(kidsOf(a.couple, ev.date))})`);
 
   return `
     <article class="diary-ev">
@@ -94,6 +97,7 @@ function eveningPage(d, idx) {
         <p class="diary-nr">Abend ${ev.nr}</p>
         <h2>bei ${esc(coupleName(ev.host))}</h2>
         <p class="muted">${esc(fmtDate(ev.date, { day: 'numeric', month: 'long', year: 'numeric' }))}</p>
+        ${kids.length ? `<p class="diary-kids">👧 Mit den Kindern von ${esc(kids.join(' und '))}</p>` : ''}
       </header>
 
       ${cover ? `
@@ -108,7 +112,7 @@ function eveningPage(d, idx) {
             const x = d.courses.find((c) => c.kind === kind);
             if (!x || !x.name) return '';
             const idee = x.idea_id ? findIdee(x.idea_id) : null;
-            return `<div class="menu-course"><p class="menu-kind">${GANG[kind]}</p><p class="menu-name">${esc(x.name)}</p>${idee?.orig ? `<p class="menu-orig">${esc(idee.orig)}</p>` : ''}</div>`;
+            return `<div class="menu-course"><p class="menu-kind">${GANG[kind]}</p><p class="menu-name">${esc(x.name)}</p>${idee?.orig ? `<p class="menu-orig">${esc(idee.orig)}</p>` : ''}${x.kids_note ? `<p class="menu-kids">Für die Kinder: ${esc(x.kids_note)}</p>` : ''}</div>`;
           }).filter(Boolean).join('<div class="menu-sep" aria-hidden="true">✦</div>')}
         </div>`
         : upcoming ? `<p class="secret">${ev.menuFilled && !ev.menuOpen ? '🤫 Das Menü ist noch geheim.' : 'Dieser Abend kommt noch.'}</p>` : ''}

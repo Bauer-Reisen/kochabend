@@ -1,5 +1,5 @@
 // Gemeinsamer Zustand und kleine Helfer für alle Seiten.
-import { store } from './api.js?v=0.3.0';
+import { store } from './api.js?v=0.3.1';
 
 export const ctx = { people: null, state: null };
 
@@ -10,8 +10,8 @@ export const couple = (id) => ctx.people?.couples.find((c) => c.id === id) || nu
 export const coupleName = (id) => couple(id)?.name || id;
 
 // Kinder eines Paares mit heutigem Alter (ungefähr, aus dem Geburtsjahr)
-export function kidsOf(coupleId) {
-  const year = new Date().getFullYear();
+export function kidsOf(coupleId, atIso) {
+  const year = atIso ? Number(atIso.slice(0, 4)) : new Date().getFullYear(); // Alter am Abend (für das Tagebuch)
   return (ctx.people?.kids || []).filter((k) => k.couple === coupleId).map((k) => year - k.birth_year).sort((a, b) => a - b);
 }
 export const agesText = (ages) => ages.length ? ages.join(' und ') + (ages.length === 1 ? ' Jahre' : '') : '';

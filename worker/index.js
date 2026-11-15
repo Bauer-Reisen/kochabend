@@ -114,6 +114,8 @@ export default {
         const ev = await one('SELECT id, round_id AS round, nr, date, host, released, cover_photo AS cover, version FROM evenings WHERE id = ?', m[1]);
         if (!ev) return reply(404, { error: 'Diesen Abend gibt es nicht.' });
         const isHost = me.couple === ev.host;
+        const past = !!(ev.date && ev.date < today());
+        const canEditMenu = isHost || past; // nach dem Abend ist nichts mehr geheim: alle dürfen nachtragen
         const action = m[2] || '';
 
         if (!action && method === 'GET') {
@@ -133,7 +135,7 @@ export default {
             p.small = await signedPath(env, `${p.id}_s.jpg`, exp);
           }
           return reply(200, {
-            evening: { ...ev, menuOpen, isHost, menuFilled: filled },
+            evening: { ...ev, menuOpen, isHost, past, canEditMenu, menuFilled: filled },
             courses,
             attendance: await all('SELECT couple_id AS couple, with_kids, updated_by FROM attendance WHERE evening_id = ?', ev.id),
             photos,
@@ -145,7 +147,7 @@ export default {
 
         // Menü speichern (nur Gastgeber)
         if (action === 'courses' && method === 'PUT') {
-          if (!isHost) return reply(403, { error: 'Das Menü tragen die Gastgeber ein.' });
+          if (!canEditMenu) return reply(403, { error: 'Das Menü tragen die Gastgeber ein.' });
           const body = await request.json();
           const now = Date.now();
           const stmts = [];

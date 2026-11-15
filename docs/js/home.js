@@ -1,9 +1,9 @@
 // Startseite: die laufende Runde mit ihren drei Abenden, der aktuelle Abend groß.
-import { VERSION, APP_NAME } from './config.js?v=0.3.0';
-import { esc } from './ui.js?v=0.3.0';
-import { ctx, me, coupleName, fmtDate, fmtShort, todayIso, currentEvening } from './ctx.js?v=0.3.0';
-import { kueche } from './kuechen.js?v=0.3.0';
-import { ornament } from './ornament.js?v=0.3.0';
+import { VERSION, APP_NAME } from './config.js?v=0.3.1';
+import { esc } from './ui.js?v=0.3.1';
+import { ctx, me, coupleName, fmtDate, fmtShort, todayIso, currentEvening } from './ctx.js?v=0.3.1';
+import { kueche } from './kuechen.js?v=0.3.1';
+import { ornament } from './ornament.js?v=0.3.1';
 
 const standalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
 const isIos = () => /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);

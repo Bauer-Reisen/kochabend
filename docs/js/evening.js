@@ -1,9 +1,9 @@
 // Seite eines Abends: Menü, Kinder, Fotos, Sprüche, Eindrücke.
-import * as api from './api.js?v=0.3.0';
-import { esc, dialog, toast } from './ui.js?v=0.3.0';
-import { ctx, me, personName, coupleName, kidsOf, agesText, fmtDate, eveningForTime, roundOf } from './ctx.js?v=0.3.0';
-import { kueche, GANG, findIdee } from './kuechen.js?v=0.3.0';
-import { addPhotos, readTakenTime, qAll, onQueueChange } from './photos.js?v=0.3.0';
+import * as api from './api.js?v=0.3.1';
+import { esc, dialog, toast } from './ui.js?v=0.3.1';
+import { ctx, me, personName, coupleName, kidsOf, agesText, fmtDate, eveningForTime, roundOf } from './ctx.js?v=0.3.1';
+import { kueche, GANG, findIdee } from './kuechen.js?v=0.3.1';
+import { addPhotos, readTakenTime, qAll, onQueueChange } from './photos.js?v=0.3.1';
 
 const linkify = (s) => esc(s).replace(/https?:\/\/[^\s<]+/g, (u) => `<a href="${u}" target="_blank" rel="noopener">${u.length > 40 ? u.slice(0, 38) + '…' : u}</a>`).replace(/\n/g, '<br>');
 
@@ -103,37 +103,35 @@ function kidsSection(ev, my) {
   const row = (c) => {
     const a = data.attendance.find((x) => x.couple === c.id);
     const v = a ? a.with_kids : null;
-    const ages = agesText(kidsOf(c.id));
+    const ages = agesText(kidsOf(c.id, ev.past ? ev.date : null));
     if (c.id === my.couple) {
       return `
         <div class="kids-row">
-          <span><strong>Ihr</strong> kommt …</span>
+          <span><strong>Ihr</strong> ${ev.past ? 'wart …' : 'kommt …'}</span>
           <span class="seg" role="group" aria-label="Mit oder ohne Kinder">
             <button type="button" data-kids="1" aria-pressed="${v === 1}">mit Kindern</button>
             <button type="button" data-kids="0" aria-pressed="${v === 0}">ohne Kinder</button>
           </span>
         </div>`;
     }
-    return `<p class="kids-row"><span>${esc(c.name)}</span> <span class="muted">${v === 1 ? `mit Kindern (${esc(ages)})` : v === 0 ? 'ohne Kinder' : 'noch offen'}</span></p>`;
+    return `<p class="kids-row"><span>${esc(c.name)}</span> <span class="muted">${v === 1 ? `mit Kindern (${esc(ages)})` : v === 0 ? 'ohne Kinder' : ev.past ? 'nicht eingetragen' : 'noch offen'}</span></p>`;
   };
-  return `<section class="block kids"><h2>Kinder dabei?</h2>${guests.map(row).join('')}</section>`;
+  return `<section class="block kids"><h2>${ev.past ? 'Waren Kinder dabei?' : 'Kinder dabei?'}</h2>${guests.map(row).join('')}</section>`;
 }
 
 // ---------- Menü ----------
-function menuSection(ev, round) {
-  if (ev.isHost) {
-    const c = (kind) => data.courses.find((x) => x.kind === kind) || { kind, name: '', note: '', kids_note: '' };
-    const kidsComing = data.attendance.filter((a) => a.with_kids === 1).map((a) => `${coupleName(a.couple)} (${agesText(kidsOf(a.couple))})`);
-    return `
-      <p class="muted">Ihr seid Gastgeber. ${ev.released ? 'Das Menü ist <strong>freigegeben</strong> – alle sehen es.' : 'Die Gäste sehen das Menü erst, wenn ihr es freigebt.'}</p>
-      ${kidsComing.length ? `<p class="note">👧 Mit Kindern: ${esc(kidsComing.join(', '))}</p>` : ''}
+function menuForm(ev, round) {
+  const c = (kind) => data.courses.find((x) => x.kind === kind) || { kind, name: '', note: '', kids_note: '' };
+  const kidsComing = data.attendance.filter((a) => a.with_kids === 1).map((a) => `${coupleName(a.couple)} (${agesText(kidsOf(a.couple, ev.past ? ev.date : null))})`);
+  return `
+      ${kidsComing.length ? `<p class="note">👧 ${ev.past ? 'Mit Kindern da' : 'Mit Kindern'}: ${esc(kidsComing.join(', '))}</p>` : ''}
       <form class="menu-form" data-form="menu">
         ${['vor', 'haupt', 'nach'].map((kind) => {
           const x = c(kind);
           return `
           <fieldset class="course">
             <legend>${GANG[kind]}</legend>
-            <input type="text" name="${kind}-name" value="${esc(x.name)}" placeholder="Was gibt es?" maxlength="120">
+            <input type="text" name="${kind}-name" value="${esc(x.name)}" placeholder="${ev.past ? 'Was gab es?' : 'Was gibt es?'}" maxlength="120">
             <textarea name="${kind}-note" rows="2" placeholder="Notiz oder Rezept-Link (optional)" maxlength="2000">${esc(x.note)}</textarea>
             <textarea name="${kind}-kids" rows="1" placeholder="Für die Kinder (optional)" maxlength="1000">${esc(x.kids_note)}</textarea>
             <input type="hidden" name="${kind}-idea" value="${esc(x.idea_id || '')}">
@@ -141,13 +139,32 @@ function menuSection(ev, round) {
           </fieldset>`;
         }).join('')}
         <button type="submit" class="btn btn-wide">Menü speichern</button>
-      </form>
+      </form>`;
+}
+
+function menuSection(ev, round) {
+  // Nach dem Abend: nichts mehr geheim, alle dürfen das Menü nachtragen oder ändern
+  if (ev.past) {
+    const has = data.courses.some((c) => c.name);
+    return `
+      ${has ? menuCard() + '<p class="center"><button type="button" class="link small" data-act="edit-menu">Menü ändern</button></p>'
+        : '<p class="muted">Noch kein Menü eingetragen. Der Abend ist vorbei – jede und jeder kann es nachtragen.</p>'}
+      <div data-menu-edit ${has ? 'hidden' : ''}>${menuForm(ev, round)}</div>`;
+  }
+  if (ev.isHost) {
+    return `
+      <p class="muted">Ihr seid Gastgeber. ${ev.released ? 'Das Menü ist <strong>freigegeben</strong> – alle sehen es.' : 'Die Gäste sehen das Menü erst, wenn ihr es freigebt.'}</p>
+      ${menuForm(ev, round)}
       <button type="button" class="btn ${ev.released ? '' : 'btn-primary'} btn-wide" data-act="release">${ev.released ? 'Menü wieder verdecken' : '🎉 Menü freigeben'}</button>`;
   }
   if (!ev.menuOpen) {
     return `<p class="secret">🤫 Das Menü ist noch geheim.<br><span class="muted">${esc(coupleName(ev.host))} geben es am Abend frei.${ev.menuFilled ? ' (Es ist schon eingetragen.)' : ''}</span></p>`;
   }
   if (!data.courses.some((c) => c.name)) return '<p class="muted">Noch kein Menü eingetragen.</p>';
+  return menuCard();
+}
+
+function menuCard() {
   return `<div class="menu-card">${['vor', 'haupt', 'nach'].map((kind) => {
     const x = data.courses.find((c) => c.kind === kind);
     if (!x || !x.name) return '';
@@ -209,7 +226,12 @@ function wire(view, ev, round, reload) {
     e.preventDefault();
     const f = Object.fromEntries(new FormData(form).entries());
     const courses = ['vor', 'haupt', 'nach'].map((kind) => ({ kind, name: f[`${kind}-name`], note: f[`${kind}-note`], kids_note: f[`${kind}-kids`], idea_id: f[`${kind}-idea`] || null }));
-    if (await guard(() => api.saveCourses(ev.id, courses))) toast('Menü gespeichert');
+    if (await guard(() => api.saveCourses(ev.id, courses))) { toast('Menü gespeichert'); if (ev.past) reload(); }
+  });
+
+  on('[data-act=edit-menu]', (e) => {
+    view.querySelector('[data-menu-edit]').hidden = false;
+    e.currentTarget.closest('p').remove();
   });
 
   on('[data-act=release]', async () => {

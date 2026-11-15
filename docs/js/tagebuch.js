@@ -1,11 +1,11 @@
 // Das schöne Tagebuch: Titelseite mit allen Ländern, je Land ein Kapitel mit seinen Abenden.
 // Nur zum Anschauen – gesammelt wird auf den Abend-Seiten.
-import * as api from './api.js?v=0.3.1';
-import { esc } from './ui.js?v=0.3.1';
-import { ctx, personName, coupleName, fmtDate, todayIso, kidsOf, agesText } from './ctx.js?v=0.3.1';
-import { kueche, GANG, findIdee } from './kuechen.js?v=0.3.1';
-import { ornament } from './ornament.js?v=0.3.1';
-import { musicLabel } from './evening.js?v=0.3.1';
+import * as api from './api.js?v=0.3.2';
+import { esc } from './ui.js?v=0.3.2';
+import { ctx, personName, coupleName, fmtDate, todayIso, kidsOf, agesText } from './ctx.js?v=0.3.2';
+import { kueche, GANG, findIdee } from './kuechen.js?v=0.3.2';
+import { ornament } from './ornament.js?v=0.3.2';
+import { musicLabel } from './evening.js?v=0.3.2';
 
 const year = (iso) => (iso ? iso.slice(0, 4) : '');
 // leichte, aber feste Schräglage je Foto (sieht bei jedem Öffnen gleich aus)
@@ -17,7 +17,6 @@ export function renderBook(view) {
   const t = todayIso();
   view.innerHTML = `
     <section class="page book">
-      <a class="back" href="#/">‹ Übersicht</a>
       <header class="book-cover">
         <p class="kicker">Unser Kochabend-Tagebuch</p>
         <h1 class="title title-name"><span class="tn-small">In</span> 80 Küchen <span class="tn-line">um die Welt</span></h1>

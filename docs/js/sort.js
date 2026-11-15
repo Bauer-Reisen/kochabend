@@ -1,12 +1,12 @@
 // Viele Fotos auf einmal: die App liest das Aufnahmedatum und ordnet jedes Foto dem passenden Abend zu.
-import { esc, toast } from './ui.js?v=0.3.1';
-import { ctx, coupleName, fmtDate, eveningForTime, roundOf } from './ctx.js?v=0.3.1';
-import { readTakenTime, addPhotos } from './photos.js?v=0.3.1';
+import { esc, toast } from './ui.js?v=0.3.2';
+import { ctx, coupleName, fmtDate, eveningForTime, roundOf } from './ctx.js?v=0.3.2';
+import { readTakenTime, addPhotos } from './photos.js?v=0.3.2';
 
 export function renderSort(view) {
   view.innerHTML = `
     <section class="page">
-      <a class="back" href="#/">‹ Übersicht</a>
+      <a class="back" href="#/mehr">‹ Mehr</a>
       <header class="ev-head">
         <p class="kicker">Viele Fotos auf einmal</p>
         <h1 class="title title-sm">Fotos einsortieren</h1>

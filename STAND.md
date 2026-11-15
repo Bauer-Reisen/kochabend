@@ -27,6 +27,7 @@ Plan: siehe PLAN.md. Nach jedem Abschnitt: veröffentlichen, Link + Testpunkte n
 - [x] **3 – Schönes Tagebuch** (Version 0.3.0, 16.11.2026): `#/tagebuch` Titelseite (Küche x von 80, Kapitel je Land), `#/tagebuch/<runde>` Kapitel mit Abend-Seiten (Titelfoto als Polaroid: Gastgeber-Wahl, sonst meiste Herzen; Menükarte; Sprüche als Zettel; Polaroid-Fotos; Eindrücke; Musik-Link). Wartet auf Test der Nutzerin.
 - [x] **Musik** (0.3.0): Karte auf jeder Abend-Seite. Knopf öffnet Spotify-Suche (Handy: `spotify:search:`, PC: open.spotify.com), Feld `musik` in kuechen.js. Eigene Playlist als Link (Tabelle `music`, nur Spotify/YouTube/Apple Music). Kein Spotify-Login (bewusst). Ländername nur „Elláda“ ohne Erklärung (Wunsch der Nutzerin).
 - [x] **0.3.1** (16.11.2026): Vergangene Abende: alle dürfen das Menü nachtragen/ändern (Worker `canEditMenu = isHost || past`), Kinder-Frage in Vergangenheit („Wart ihr …“), Tagebuch zeigt Kinder (Alter am Abend) und „Für die Kinder“ im Menü.
+- [x] **0.3.2** (16.11.2026): Reiterleiste unten (tabs.js): Jetzt · Tagebuch · Termine (termine.js: wer wann kocht, Platz für Terminfinder/Kalender-Abo) · Ideen · Mehr (mehr.js: Einsortieren, Home-Bildschirm, Rundgang, Name, Abmelden). Startseite = nur laufende Runde.
 - [ ] 4 – Rezepte
 - [ ] 5 – Abstimmung (bis zum letzten Griechenland-Abend)
 - [ ] 6 – Sicherung & Feinschliff

@@ -1,22 +1,26 @@
 // Einstieg der App: Code eingeben → Name wählen → Seiten (Startseite, Abend, Ideen, Einsortieren).
-import { VERSION } from './config.js?v=0.3.1';
-import { store, login, loggedIn, logout, getPeople, getState, ApiError } from './api.js?v=0.3.1';
-import { esc, dialog, toast } from './ui.js?v=0.3.1';
-import { runTour } from './tour.js?v=0.3.1';
-import { unseen, showNews, NEWS } from './news.js?v=0.3.1';
-import { ctx, me } from './ctx.js?v=0.3.1';
-import { ornament } from './ornament.js?v=0.3.1';
-import { renderHome } from './home.js?v=0.3.1';
-import { renderEvening } from './evening.js?v=0.3.1';
-import { renderIdeas } from './ideas.js?v=0.3.1';
-import { renderSort } from './sort.js?v=0.3.1';
-import { renderBook, renderChapter } from './tagebuch.js?v=0.3.1';
-import { qAll, onQueueChange, flush } from './photos.js?v=0.3.1';
+import { VERSION } from './config.js?v=0.3.2';
+import { store, login, loggedIn, logout, getPeople, getState, ApiError } from './api.js?v=0.3.2';
+import { esc, dialog, toast } from './ui.js?v=0.3.2';
+import { runTour } from './tour.js?v=0.3.2';
+import { unseen, showNews, NEWS } from './news.js?v=0.3.2';
+import { ctx, me } from './ctx.js?v=0.3.2';
+import { ornament } from './ornament.js?v=0.3.2';
+import { renderHome } from './home.js?v=0.3.2';
+import { renderEvening } from './evening.js?v=0.3.2';
+import { renderIdeas } from './ideas.js?v=0.3.2';
+import { renderSort } from './sort.js?v=0.3.2';
+import { renderMore } from './mehr.js?v=0.3.2';
+import { renderDates } from './termine.js?v=0.3.2';
+import { renderTabs, hideTabs } from './tabs.js?v=0.3.2';
+import { renderBook, renderChapter } from './tagebuch.js?v=0.3.2';
+import { qAll, onQueueChange, flush } from './photos.js?v=0.3.2';
 
 const view = document.getElementById('view');
 
 // ---------- 1. Code eingeben ----------
 function showLogin(message = '') {
+  hideTabs();
   view.innerHTML = `
     <section class="gate">
       <p class="kicker">Unser Kochabend-Tagebuch</p>
@@ -53,6 +57,7 @@ function showLogin(message = '') {
 
 // ---------- 2. Wer bist du? ----------
 function showWho() {
+  hideTabs();
   const { couples, persons } = ctx.people;
   view.innerHTML = `
     <section class="gate">
@@ -102,7 +107,10 @@ async function route(fresh = false) {
     else if (page === 'einsortieren') renderSort(view);
     else if (page === 'tagebuch' && a) await renderChapter(view, a);
     else if (page === 'tagebuch') renderBook(view);
+    else if (page === 'termine') renderDates(view);
+    else if (page === 'mehr') { renderMore(view); wireHome(); }
     else { renderHome(view); wireHome(); }
+    renderTabs(page || '');
     queueBanner();
   } catch (ex) {
     handleError(ex);

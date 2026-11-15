@@ -1,12 +1,14 @@
 // „Was ist neu?" – nach einem Update einmal, wenn man die App wieder öffnet.
 // Wer die App neu hat, bekommt stattdessen den Rundgang und sieht die alten Neuigkeiten nicht.
 // Neueste zuerst; nur Änderungen, die man sieht und kennen sollte (keine Reparaturen).
-import { dialog } from './ui.js?v=0.3.1';
+import { dialog } from './ui.js?v=0.3.2';
 
 export const NEWS = [
   {
-    v: '0.3.1', title: 'Nachtragen',
+    v: '0.3.2', title: 'Reiter unten',
     items: [
+      'Unten gibt es jetzt <strong>Reiter</strong>: <strong>Jetzt</strong> (die laufende Runde), <strong>Tagebuch</strong>, <strong>Termine</strong> (wer wann kocht), <strong>Ideen</strong> und <strong>Mehr</strong> (Fotos einsortieren, Abmelden …).',
+      'Ist ein Abend vorbei, kann <strong>jede und jeder das Menü nachtragen</strong> – auch was es für die Kinder gab.',
       'Ist ein Abend vorbei, kann <strong>jede und jeder das Menü nachtragen</strong>, nicht nur die Gastgeber.',
       'Bei vergangenen Abenden fragt die App: <strong>Wart ihr mit Kindern?</strong> Im Tagebuch steht dann, welche Kinder dabei waren und was es für sie gab.',
     ],

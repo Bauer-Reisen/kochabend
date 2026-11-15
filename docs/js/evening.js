@@ -1,9 +1,9 @@
 // Seite eines Abends: Menü, Kinder, Fotos, Sprüche, Eindrücke.
-import * as api from './api.js?v=0.3.1';
-import { esc, dialog, toast } from './ui.js?v=0.3.1';
-import { ctx, me, personName, coupleName, kidsOf, agesText, fmtDate, eveningForTime, roundOf } from './ctx.js?v=0.3.1';
-import { kueche, GANG, findIdee } from './kuechen.js?v=0.3.1';
-import { addPhotos, readTakenTime, qAll, onQueueChange } from './photos.js?v=0.3.1';
+import * as api from './api.js?v=0.3.2';
+import { esc, dialog, toast } from './ui.js?v=0.3.2';
+import { ctx, me, personName, coupleName, kidsOf, agesText, fmtDate, eveningForTime, roundOf } from './ctx.js?v=0.3.2';
+import { kueche, GANG, findIdee } from './kuechen.js?v=0.3.2';
+import { addPhotos, readTakenTime, qAll, onQueueChange } from './photos.js?v=0.3.2';
 
 const linkify = (s) => esc(s).replace(/https?:\/\/[^\s<]+/g, (u) => `<a href="${u}" target="_blank" rel="noopener">${u.length > 40 ? u.slice(0, 38) + '…' : u}</a>`).replace(/\n/g, '<br>');
 

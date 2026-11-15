@@ -1,10 +1,10 @@
 // Ideen je Land und Gang – mit Kinder-Variante und Link zur Rezeptsuche.
 // Gastgeber können eine Idee direkt für ihren Abend übernehmen.
 // Was in dieser Küche schon gekocht wurde (offene Menüs), wird ausgeblendet und unten klein genannt.
-import * as api from './api.js?v=0.3.1';
-import { esc, toast } from './ui.js?v=0.3.1';
-import { me, eveningById, coupleName } from './ctx.js?v=0.3.1';
-import { kueche, GANG, suchLink } from './kuechen.js?v=0.3.1';
+import * as api from './api.js?v=0.3.2';
+import { esc, toast } from './ui.js?v=0.3.2';
+import { me, eveningById, coupleName } from './ctx.js?v=0.3.2';
+import { kueche, GANG, suchLink } from './kuechen.js?v=0.3.2';
 
 const ERST = 6; // so viele Ideen je Gang sofort, der Rest hinter „Noch mehr Ideen"
 

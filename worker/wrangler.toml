@@ -1,0 +1,24 @@
+# Einstellungen für den Cloudflare Worker „kochabend".
+# Hier steht NICHTS Geheimes. Der gemeinsame Code wird im Cloudflare-Dashboard
+# als Secret mit dem Namen GROUP_CODE eingetragen.
+
+name = "kochabend"
+main = "index.js"
+compatibility_date = "2026-06-01"
+
+[vars]
+# Nur diese Websites dürfen den Worker benutzen (durch Komma getrennt).
+ALLOWED_ORIGINS = "https://bauer-reisen.github.io,http://localhost:5800"
+
+# Schutz vor Raten des Codes: höchstens 10 Versuche pro Minute und Internet-Anschluss
+[[ratelimits]]
+name = "LOGIN_LIMITER"
+namespace_id = "2001"
+  [ratelimits.simple]
+  limit = 10
+  period = 60
+
+[[d1_databases]]
+binding = "DB"
+database_name = "kochabend"
+database_id = "438de803-9786-4356-938d-cc28fc805785"

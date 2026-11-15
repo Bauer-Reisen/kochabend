@@ -1,0 +1,176 @@
+/* Kochabend – Grundgestaltung: cremefarbenes Papier, Tinte, Terrakotta als Akzent. */
+
+@font-face { font-family: 'Fraunces'; src: url('fonts/fraunces-latin-400-normal.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Fraunces'; src: url('fonts/fraunces-latin-400-italic.woff2') format('woff2'); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Fraunces'; src: url('fonts/fraunces-latin-600-normal.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+@font-face { font-family: 'Fraunces'; src: url('fonts/fraunces-latin-700-normal.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+@font-face { font-family: 'Lora'; src: url('fonts/lora-latin-400-normal.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Lora'; src: url('fonts/lora-latin-400-italic.woff2') format('woff2'); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Lora'; src: url('fonts/lora-latin-600-normal.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+@font-face { font-family: 'Caveat'; src: url('fonts/caveat-latin-400-normal.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Caveat'; src: url('fonts/caveat-latin-600-normal.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+
+:root {
+  --paper: #f6f0e4;
+  --paper-2: #efe6d4;
+  --card: #fffaf0;
+  --ink: #2b2420;
+  --ink-soft: #5d5249;
+  --muted: #8a7f72;
+  --line: #ddd0b9;
+  --accent: #b5532f;      /* Terrakotta */
+  --accent-ink: #fffaf0;
+  --accent-soft: #f1d9cc;
+  --olive: #6b7a3a;
+  --error: #a3261b;
+  --radius: 14px;
+  --shadow: 0 1px 2px rgba(60, 40, 20, .06), 0 6px 20px rgba(60, 40, 20, .07);
+  --f-title: 'Fraunces', Georgia, serif;
+  --f-text: 'Lora', Georgia, serif;
+  --f-hand: 'Caveat', 'Segoe Print', cursive;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--paper);
+  /* leichte Papierstruktur */
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(255,255,255,.55), transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(181,83,47,.05), transparent 45%);
+  color: var(--ink);
+  font: 17px/1.55 var(--f-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+.view {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: calc(env(safe-area-inset-top) + 24px) 16px calc(env(safe-area-inset-bottom) + 32px);
+}
+.loading { text-align: center; color: var(--muted); margin-top: 40vh; }
+
+/* ---------- Schrift ---------- */
+.kicker { font-family: var(--f-hand); font-size: 1.5rem; color: var(--accent); margin: 0; line-height: 1; }
+.title { font-family: var(--f-title); font-weight: 600; font-size: clamp(2.6rem, 11vw, 3.4rem); line-height: 1.05; margin: .15em 0 0; letter-spacing: -.01em; }
+.title-sm { font-size: clamp(2rem, 8.5vw, 2.6rem); }
+h2, h3 { font-family: var(--f-title); font-weight: 600; line-height: 1.2; margin: 0 0 .4em; }
+h2 { font-size: 1.35rem; }
+h3 { font-size: 1.1rem; }
+.lead { font-style: italic; color: var(--ink-soft); font-size: 1.1rem; margin: .2em 0 1.4em; }
+.muted { color: var(--muted); }
+.small { font-size: .85rem; }
+.center { text-align: center; }
+.hint { color: var(--muted); font-size: .9rem; margin: .8em 0 0; }
+
+.ornament { display: block; width: 120px; height: 40px; color: var(--accent); margin: 14px auto 18px; opacity: .85; }
+
+/* ---------- Karten, Formulare, Knöpfe ---------- */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+  margin: 0 0 16px;
+  text-align: left;
+}
+.form label { display: block; font-weight: 600; margin-bottom: 6px; }
+input[type=text], input[type=password], input[type=date], textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 18px; /* ab 16px zoomt das iPhone nicht hinein */
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--ink);
+}
+input:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+.error { color: var(--error); min-height: 1.4em; margin: .4em 0; font-size: .95rem; }
+
+.btn {
+  font: 600 1rem/1 var(--f-text);
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  padding: 14px 22px;
+  min-height: 48px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:disabled { opacity: .6; }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn-primary:active { filter: brightness(.92); }
+.btn-quiet { background: transparent; }
+.btn-wide { width: 100%; }
+.link { font: inherit; background: none; border: 0; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; padding: 8px; cursor: pointer; }
+
+/* ---------- Einstieg ---------- */
+.gate { text-align: center; padding-top: 6vh; }
+.gate .card { margin-top: 8px; }
+
+.who { display: grid; gap: 14px; margin: 8px 0 18px; }
+.who-couple {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 10px;
+}
+.who-btn {
+  flex: 1;
+  font: 600 1.15rem var(--f-title);
+  padding: 16px 8px;
+  min-height: 56px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+.who-btn:active, .who-btn:focus-visible { border-color: var(--accent); background: var(--accent-soft); outline: none; }
+.amp { font-family: var(--f-hand); font-size: 1.8rem; color: var(--accent); }
+
+/* ---------- Startseite ---------- */
+.home-head { text-align: center; padding-top: 2vh; }
+.home-head .muted { margin: .3em 0 0; font-style: italic; }
+.soon-list { padding-left: 1.3em; margin: .4em 0 0; }
+.soon-list li { margin: .35em 0; }
+.install { background: var(--paper-2); }
+.install p { margin: 0; }
+.ios-share {
+  display: inline-block; width: 14px; height: 17px; vertical-align: -2px;
+  border: 1.6px solid var(--ink); border-top: 0; border-radius: 0 0 3px 3px; position: relative; margin: 0 2px;
+}
+.ios-share::before { content: ''; position: absolute; left: 50%; top: -6px; width: 1.6px; height: 11px; background: var(--ink); transform: translateX(-50%); }
+.foot { text-align: center; margin-top: 28px; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+
+/* ---------- Dialoge ---------- */
+.dlg {
+  border: 0; border-radius: 18px; padding: 0;
+  width: min(92vw, 440px);
+  background: var(--card); color: var(--ink);
+  box-shadow: 0 20px 60px rgba(40, 25, 10, .3);
+}
+.dlg::backdrop { background: rgba(43, 36, 32, .45); }
+.dlg form { padding: 22px 20px 16px; }
+.dlg-body p { margin: 0 0 .8em; }
+.dlg-buttons { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.tour { text-align: center; }
+.tour-icon { font-size: 2.6rem; line-height: 1; margin: 4px 0 10px; }
+.tour-dots { display: flex; justify-content: center; gap: 6px; margin: 14px 0 0; }
+.tour-dots span { width: 7px; height: 7px; border-radius: 50%; background: var(--line); }
+.tour-dots span.on { background: var(--accent); }
+.news ul { padding-left: 1.2em; margin: 0 0 1em; }
+
+/* ---------- Meldung ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 20px);
+  transform: translate(-50%, 20px); opacity: 0; transition: .25s;
+  background: var(--ink); color: var(--paper); padding: 12px 18px; border-radius: 999px;
+  max-width: calc(100vw - 32px); font-size: .95rem; z-index: 10;
+}
+.toast.show { transform: translate(-50%, 0); opacity: 1; }

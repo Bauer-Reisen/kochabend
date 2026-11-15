@@ -1,16 +1,16 @@
 // Einstieg der App: Code eingeben → Name wählen → Seiten (Startseite, Abend, Ideen, Einsortieren).
-import { VERSION } from './config.js?v=0.2.1';
-import { store, login, loggedIn, logout, getPeople, getState, ApiError } from './api.js?v=0.2.1';
-import { esc, dialog, toast } from './ui.js?v=0.2.1';
-import { runTour } from './tour.js?v=0.2.1';
-import { unseen, showNews, NEWS } from './news.js?v=0.2.1';
-import { ctx, me } from './ctx.js?v=0.2.1';
-import { ornament } from './ornament.js?v=0.2.1';
-import { renderHome } from './home.js?v=0.2.1';
-import { renderEvening } from './evening.js?v=0.2.1';
-import { renderIdeas } from './ideas.js?v=0.2.1';
-import { renderSort } from './sort.js?v=0.2.1';
-import { qAll, onQueueChange, flush } from './photos.js?v=0.2.1';
+import { VERSION } from './config.js?v=0.2.2';
+import { store, login, loggedIn, logout, getPeople, getState, ApiError } from './api.js?v=0.2.2';
+import { esc, dialog, toast } from './ui.js?v=0.2.2';
+import { runTour } from './tour.js?v=0.2.2';
+import { unseen, showNews, NEWS } from './news.js?v=0.2.2';
+import { ctx, me } from './ctx.js?v=0.2.2';
+import { ornament } from './ornament.js?v=0.2.2';
+import { renderHome } from './home.js?v=0.2.2';
+import { renderEvening } from './evening.js?v=0.2.2';
+import { renderIdeas } from './ideas.js?v=0.2.2';
+import { renderSort } from './sort.js?v=0.2.2';
+import { qAll, onQueueChange, flush } from './photos.js?v=0.2.2';
 
 const view = document.getElementById('view');
 
@@ -71,15 +71,20 @@ function showWho() {
       <p class="hint center">Tippe auf <strong>deinen eigenen Namen</strong>. Das merkt sich dieses Handy. Ändern kannst du es jederzeit unten auf der Startseite („Ich bin nicht …“).</p>
     </section>`;
   view.querySelectorAll('.who-btn').forEach((b) => b.addEventListener('click', async () => {
-    const first = !store.get('person') && !store.get('tourSeen');
     store.set('person', b.dataset.id);
     await route(true);
-    if (first) {
-      await runTour(me()?.name);
-      store.set('tourSeen', '1');
-      store.set('newsSeen', NEWS[0]?.v || VERSION);
-    }
+    await tourIfNew();
   }));
+}
+
+// Rundgang, solange er nicht bis zum Ende angesehen oder bewusst übersprungen wurde.
+// Wird die App mittendrin geschlossen, kommt er beim nächsten Öffnen wieder.
+async function tourIfNew() {
+  if (store.get('tourSeen')) return false;
+  await runTour(me()?.name);
+  store.set('tourSeen', '1');
+  store.set('newsSeen', NEWS[0]?.v || VERSION);
+  return true;
 }
 
 // ---------- Seiten ----------
@@ -161,8 +166,9 @@ async function start() {
   if (!me()) return showWho();
   await route(true);
   flush();
+  if (await tourIfNew()) return;
   const list = unseen(store.get('newsSeen'));
-  if (list.length && store.get('tourSeen')) {
+  if (list.length) {
     await showNews(list);
     store.set('newsSeen', NEWS[0].v);
   }

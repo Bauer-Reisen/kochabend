@@ -5,11 +5,11 @@ App-Name seit 0.1.1: „In 80 Küchen um die Welt", auf dem Home-Bildschirm „8
 Plan: siehe PLAN.md. Nach jedem Abschnitt: veröffentlichen, Link + Testpunkte nennen, auf Okay warten.
 
 ## Eingerichtet
-- Ordner `C:\Users\Steffi\Documents\Kochabend-App`, GitHub-Repo https://github.com/Bauer-Reisen/kochabend (öffentlich, hochgeladen 15.11.2026). Pages: Branch `main`, Ordner `/docs` (stellt der Nutzer ein). Adresse: https://bauer-reisen.github.io/kochabend/
+- Ordner `C:\Users\Steffi\Documents\Kochabend-App`, GitHub-Repo https://github.com/Bauer-Reisen/kochabend (öffentlich, hochgeladen 15.11.2026). Pages: Branch `main`, Ordner `/docs` (eingeschaltet, live geprüft 15.11.2026). Adresse: https://bauer-reisen.github.io/kochabend/
 - Zahlungsart bei Cloudflare hinterlegt (15.11.2026). R2 muss einmal im Dashboard aktiviert werden (wrangler meldet sonst Code 10042), danach legt Claude den Speicher `kochabend-fotos` an.
 - Worker online: https://kochabend.film-app.workers.dev (Version 3087fe0b). Erlaubt nur bauer-reisen.github.io und localhost:5800. 10 Code-Versuche pro Minute.
 - D1-Datenbank `kochabend` (438de803-…), Tabellen couples + persons mit den 6 Namen.
-- Secret `GROUP_CODE`: **noch nicht gesetzt** (macht die Nutzerin im Dashboard). Bis dahin antwortet der Worker „noch nicht eingerichtet". `/api/health` zeigt `code: true/false`.
+- Secret `GROUP_CODE`: gesetzt vom Nutzer (15.11.2026), online geprüft (falscher Code → 401 von github.io aus). `/api/health` zeigt `code: true/false`.
 - Zahlungsart bei Cloudflare + R2: Nutzerin will Karte hinterlegen; R2 erst für Abschnitt 2 nötig.
 
 ## Lokal testen

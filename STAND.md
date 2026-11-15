@@ -17,8 +17,9 @@ Plan: siehe PLAN.md. Nach jedem Abschnitt: veröffentlichen, Link + Testpunkte n
 
 ## Abschnitte
 - [x] **0 – Gerüst** (15.11.2026, Version 0.1.0): Code-Eingabe (Groß/Klein egal), Ausweis 400 Tage, „Wer bist du?" (3 Paare), Startseite mit Ausblick, Homescreen-Hinweis (iPhone/Android), Rundgang (6 Karten), „Was ist neu?"-Gerüst, Auto-Update über version.json, Icon Teller+Besteck, Schriften Fraunces/Lora/Caveat selbst gehostet. Lokal geprüft bei 375 px: falscher Code abgelehnt, Name gewählt, Rundgang, bleibt nach Neuladen angemeldet, kein Querscrollen. Online geprüft: fremde Herkunft 403. **Am Handy noch nicht getestet** (wartet auf Repo + Code).
-- [ ] 1 – Runden & Abende, Terminfinder (inkl. Feiertage Bayern + Vorabend), Kalender-Abo. Griechenland eintragen: Abend 1 Marco & Mareike (Datum erfragen), Abend 2 Steffi & Ali Sa 21.11.2026, Abend 3 Clari & Domi.
+- [ ] 1 – Runden & Abende, Terminfinder (inkl. Feiertage Bayern + Vorabend), Kalender-Abo. Griechenland eintragen: Abend 1 Marco & Mareike am Sa 24.10.2026, Abend 2 Steffi & Ali Sa 21.11.2026, Abend 3 Clari & Domi.
 - [ ] 2 – Füttern (Ziel: bis Sa 21.11.2026 nutzbar), Menü-Freigabe-Knopf der Gastgeber
+- [ ] 2b – Altes Tagebuch übernehmen: Ordner `altes-tagebuch/` angelegt (in .gitignore). Wartet auf Seitenfotos.
 - [ ] 3 – Schönes Tagebuch
 - [ ] 4 – Rezepte
 - [ ] 5 – Abstimmung (bis zum letzten Griechenland-Abend)

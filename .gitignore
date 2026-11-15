@@ -4,3 +4,6 @@ worker/.wrangler/
 worker/.dev.vars
 .dev.vars
 *.log
+
+# Privat: Fotos und Abschrift des alten Tagebuchs (nie ins öffentliche Repository)
+altes-tagebuch/

@@ -22,3 +22,8 @@ namespace_id = "2001"
 binding = "DB"
 database_name = "kochabend"
 database_id = "438de803-9786-4356-938d-cc28fc805785"
+
+# Fotospeicher (R2, kostenlos bis 10 GB). Nur der Worker kommt heran.
+[[r2_buckets]]
+binding = "FOTOS"
+bucket_name = "kochabend-fotos"

@@ -6,7 +6,7 @@ Plan: siehe PLAN.md. Nach jedem Abschnitt: veröffentlichen, Link + Testpunkte n
 
 ## Eingerichtet
 - Ordner `C:\Users\Steffi\Documents\Kochabend-App`, GitHub-Repo https://github.com/Bauer-Reisen/kochabend (öffentlich, hochgeladen 15.11.2026). Pages: Branch `main`, Ordner `/docs` (eingeschaltet, live geprüft 15.11.2026). Adresse: https://bauer-reisen.github.io/kochabend/
-- Zahlungsart bei Cloudflare hinterlegt (15.11.2026). R2 muss einmal im Dashboard aktiviert werden (wrangler meldet sonst Code 10042), danach legt Claude den Speicher `kochabend-fotos` an.
+- Zahlungsart bei Cloudflare hinterlegt, R2 aktiviert (15.11.2026). Speicher `kochabend-fotos` (Ort Osteuropa/eeur) angelegt und als `FOTOS` an den Worker gebunden (Version 6aebc4d3).
 - Worker online: https://kochabend.film-app.workers.dev (Version 3087fe0b). Erlaubt nur bauer-reisen.github.io und localhost:5800. 10 Code-Versuche pro Minute.
 - D1-Datenbank `kochabend` (438de803-…), Tabellen couples + persons mit den 6 Namen.
 - Secret `GROUP_CODE`: gesetzt vom Nutzer (15.11.2026), online geprüft (falscher Code → 401 von github.io aus). `/api/health` zeigt `code: true/false`.

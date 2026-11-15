@@ -29,3 +29,5 @@ Drei Paare kochen reihum Länderabende. Pro Runde ein Land (Abstimmung), drei Ab
 6. **Sicherung & Feinschliff:** Herunterladen je Land, Rundgang fertig.
 
 **Später:** Diashow, Jahresrückblick, Druck-PDF, Weltkarte, Rezept-Link-Import, Abstimmungs-Frist.
+
+**Ergänzt 16.11.2026:** Abstimmung ohne Vorauswahl: Jedes Paar schlägt frei vor (Eingabe mit Vorschlägen aus der Küchenliste, schon gekochte Länder markiert). Die Küchenliste ist nur Hilfe im Hintergrund (Schreibweise, Ideen, Farben). Musik je Abend (Spotify-Knopf + eigene Playlist).

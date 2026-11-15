@@ -1,9 +1,9 @@
 // Ideen je Land und Gang – mit Kinder-Variante und Link zur Rezeptsuche.
 // Gastgeber können eine Idee direkt für ihren Abend übernehmen.
-import * as api from './api.js?v=0.2.0';
-import { esc, toast } from './ui.js?v=0.2.0';
-import { me, eveningById } from './ctx.js?v=0.2.0';
-import { kueche, GANG, suchLink } from './kuechen.js?v=0.2.0';
+import * as api from './api.js?v=0.2.1';
+import { esc, toast } from './ui.js?v=0.2.1';
+import { me, eveningById } from './ctx.js?v=0.2.1';
+import { kueche, GANG, suchLink } from './kuechen.js?v=0.2.1';
 
 export function renderIdeas(view, kuecheId, kind, eveningId) {
   const k = kueche(kuecheId);

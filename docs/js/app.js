@@ -1,16 +1,16 @@
 // Einstieg der App: Code eingeben → Name wählen → Seiten (Startseite, Abend, Ideen, Einsortieren).
-import { VERSION } from './config.js?v=0.2.0';
-import { store, login, loggedIn, logout, getPeople, getState, ApiError } from './api.js?v=0.2.0';
-import { esc, dialog, toast } from './ui.js?v=0.2.0';
-import { runTour } from './tour.js?v=0.2.0';
-import { unseen, showNews, NEWS } from './news.js?v=0.2.0';
-import { ctx, me } from './ctx.js?v=0.2.0';
-import { ornament } from './ornament.js?v=0.2.0';
-import { renderHome } from './home.js?v=0.2.0';
-import { renderEvening } from './evening.js?v=0.2.0';
-import { renderIdeas } from './ideas.js?v=0.2.0';
-import { renderSort } from './sort.js?v=0.2.0';
-import { qAll, onQueueChange, flush } from './photos.js?v=0.2.0';
+import { VERSION } from './config.js?v=0.2.1';
+import { store, login, loggedIn, logout, getPeople, getState, ApiError } from './api.js?v=0.2.1';
+import { esc, dialog, toast } from './ui.js?v=0.2.1';
+import { runTour } from './tour.js?v=0.2.1';
+import { unseen, showNews, NEWS } from './news.js?v=0.2.1';
+import { ctx, me } from './ctx.js?v=0.2.1';
+import { ornament } from './ornament.js?v=0.2.1';
+import { renderHome } from './home.js?v=0.2.1';
+import { renderEvening } from './evening.js?v=0.2.1';
+import { renderIdeas } from './ideas.js?v=0.2.1';
+import { renderSort } from './sort.js?v=0.2.1';
+import { qAll, onQueueChange, flush } from './photos.js?v=0.2.1';
 
 const view = document.getElementById('view');
 
@@ -61,11 +61,14 @@ function showWho() {
       <div class="who">
         ${couples.map((c) => `
           <div class="who-couple">
-            ${persons.filter((p) => p.couple === c.id).map((p) => `
-              <button type="button" class="who-btn" data-id="${esc(p.id)}">${esc(p.name)}</button>`).join('<span class="amp" aria-hidden="true">&amp;</span>')}
+            <p class="who-couple-name">${esc(c.name)}</p>
+            <div class="who-pair">
+              ${persons.filter((p) => p.couple === c.id).map((p) => `
+                <button type="button" class="who-btn" data-id="${esc(p.id)}">${esc(p.name)}</button>`).join('')}
+            </div>
           </div>`).join('')}
       </div>
-      <p class="hint center">Das merkt sich dieses Handy. Ändern kannst du es unten auf der Startseite.</p>
+      <p class="hint center">Tippe auf <strong>deinen eigenen Namen</strong>. Das merkt sich dieses Handy. Ändern kannst du es jederzeit unten auf der Startseite („Ich bin nicht …“).</p>
     </section>`;
   view.querySelectorAll('.who-btn').forEach((b) => b.addEventListener('click', async () => {
     const first = !store.get('person') && !store.get('tourSeen');

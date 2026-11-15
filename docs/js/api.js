@@ -1,5 +1,5 @@
 // Verbindung zum Worker. Der Ausweis (Token) liegt nur auf diesem Handy.
-import { API } from './config.js?v=0.2.0';
+import { API } from './config.js?v=0.2.1';
 
 const KEY = 'kochabend.';
 export const store = {

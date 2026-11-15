@@ -118,19 +118,17 @@ input:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 
 .gate .card { margin-top: 8px; }
 
 .who { display: grid; gap: 14px; margin: 8px 0 18px; }
-.who-couple {
-  display: flex; align-items: center; gap: 8px;
-  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
-  box-shadow: var(--shadow); padding: 10px;
-}
+.who-couple { text-align: left; }
+.who-couple-name { font-size: .9rem; color: var(--muted); margin: 0 0 4px 4px; }
+.who-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .who-btn {
-  flex: 1;
-  font: 600 1.15rem var(--f-title);
+  font: 600 1.2rem var(--f-title);
   padding: 16px 8px;
-  min-height: 56px;
-  border-radius: 10px;
-  border: 1px solid transparent;
-  background: var(--paper);
+  min-height: 60px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--line);
+  background: var(--card);
+  box-shadow: var(--shadow);
   color: var(--ink);
   cursor: pointer;
 }

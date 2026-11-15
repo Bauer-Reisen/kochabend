@@ -3,7 +3,7 @@
 export const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
 // Dialog mit Knöpfen. Liefert { value, fields } des gedrückten Knopfs (oder null).
-export function dialog({ title, body = '', buttons = [{ label: 'OK', value: true, primary: true }] }) {
+export function dialog({ title, body = '', buttons = [{ label: 'OK', value: true, primary: true }], validate }) {
   return new Promise((resolve) => {
     const d = document.createElement('dialog');
     d.className = 'dlg';
@@ -11,6 +11,7 @@ export function dialog({ title, body = '', buttons = [{ label: 'OK', value: true
       <form novalidate>
         ${title ? `<h2>${esc(title)}</h2>` : ''}
         <div class="dlg-body">${body}</div>
+        <p class="error" role="alert"></p>
         <div class="dlg-buttons">
           ${buttons.map((b, i) => `<button type="${b.primary ? 'submit' : 'button'}" class="btn ${b.primary ? 'btn-primary' : 'btn-quiet'}" value="${i}">${esc(b.label)}</button>`).join('')}
         </div>
@@ -28,7 +29,12 @@ export function dialog({ title, body = '', buttons = [{ label: 'OK', value: true
     };
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      finish(buttons[e.submitter?.value] || buttons.find((b) => b.primary));
+      const btn = buttons[e.submitter?.value] || buttons.find((b) => b.primary);
+      if (btn?.primary && validate) {
+        const msg = validate(Object.fromEntries(new FormData(form).entries()));
+        if (msg) { d.querySelector('.error').textContent = msg; return; }
+      }
+      finish(btn);
     });
     d.querySelectorAll('button[type="button"]').forEach((b) => b.addEventListener('click', () => finish(buttons[b.value])));
     d.addEventListener('cancel', (e) => { e.preventDefault(); finish(null); });

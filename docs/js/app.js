@@ -1,26 +1,18 @@
-// Einstieg der App: Code eingeben → Name wählen → Startseite.
-import { VERSION, APP_NAME } from './config.js?v=0.1.1';
-import { store, login, loggedIn, logout, getPeople, ApiError } from './api.js?v=0.1.1';
-import { esc, dialog, toast } from './ui.js?v=0.1.1';
-import { runTour } from './tour.js?v=0.1.1';
-import { unseen, showNews, NEWS } from './news.js?v=0.1.1';
+// Einstieg der App: Code eingeben → Name wählen → Seiten (Startseite, Abend, Ideen, Einsortieren).
+import { VERSION } from './config.js?v=0.2.0';
+import { store, login, loggedIn, logout, getPeople, getState, ApiError } from './api.js?v=0.2.0';
+import { esc, dialog, toast } from './ui.js?v=0.2.0';
+import { runTour } from './tour.js?v=0.2.0';
+import { unseen, showNews, NEWS } from './news.js?v=0.2.0';
+import { ctx, me } from './ctx.js?v=0.2.0';
+import { ornament } from './ornament.js?v=0.2.0';
+import { renderHome } from './home.js?v=0.2.0';
+import { renderEvening } from './evening.js?v=0.2.0';
+import { renderIdeas } from './ideas.js?v=0.2.0';
+import { renderSort } from './sort.js?v=0.2.0';
+import { qAll, onQueueChange, flush } from './photos.js?v=0.2.0';
 
 const view = document.getElementById('view');
-let people = null; // { couples, persons } vom Worker
-
-const me = () => people?.persons.find((p) => p.id === store.get('person')) || null;
-const standalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
-const isIos = () => /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
-// Kleines Schmuckelement: Teller mit Besteck
-const ornament = `
-  <svg class="ornament" viewBox="0 0 120 40" aria-hidden="true">
-    <path d="M4 20h30M86 20h30" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-    <circle cx="60" cy="20" r="14" fill="none" stroke="currentColor" stroke-width="1.4"/>
-    <circle cx="60" cy="20" r="9" fill="none" stroke="currentColor" stroke-width="0.8" opacity=".6"/>
-    <path d="M40 8v8a3 3 0 0 0 3 3v13M43 8v7M46 8v8a3 3 0 0 1-3 3" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-    <path d="M78 8c-3 3-3 10 0 12v12" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-  </svg>`;
 
 // ---------- 1. Code eingeben ----------
 function showLogin(message = '') {
@@ -60,15 +52,16 @@ function showLogin(message = '') {
 
 // ---------- 2. Wer bist du? ----------
 function showWho() {
+  const { couples, persons } = ctx.people;
   view.innerHTML = `
     <section class="gate">
       <p class="kicker">Fast geschafft</p>
       <h1 class="title title-sm">Wer bist du?</h1>
       ${ornament}
       <div class="who">
-        ${people.couples.map((c) => `
+        ${couples.map((c) => `
           <div class="who-couple">
-            ${people.persons.filter((p) => p.couple === c.id).map((p) => `
+            ${persons.filter((p) => p.couple === c.id).map((p) => `
               <button type="button" class="who-btn" data-id="${esc(p.id)}">${esc(p.name)}</button>`).join('<span class="amp" aria-hidden="true">&amp;</span>')}
           </div>`).join('')}
       </div>
@@ -77,7 +70,7 @@ function showWho() {
   view.querySelectorAll('.who-btn').forEach((b) => b.addEventListener('click', async () => {
     const first = !store.get('person') && !store.get('tourSeen');
     store.set('person', b.dataset.id);
-    showHome();
+    await route(true);
     if (first) {
       await runTour(me()?.name);
       store.set('tourSeen', '1');
@@ -86,77 +79,85 @@ function showWho() {
   }));
 }
 
-// ---------- 3. Startseite ----------
-function showHome() {
-  const p = me();
-  if (!p) return showWho();
-  const couple = people.couples.find((c) => c.id === p.couple);
-  const installHint = standalone() ? '' : `
-    <div class="card install">
-      <h3>Als App auf den Home-Bildschirm</h3>
-      ${isIos()
-        ? '<p>In Safari unten auf das <strong>Teilen-Symbol</strong> <span class="ios-share" aria-hidden="true"></span> tippen, dann <strong>„Zum Home-Bildschirm“</strong>.</p>'
-        : '<p>Im Browser-Menü <strong>⋮</strong> auf <strong>„App installieren“</strong> oder <strong>„Zum Startbildschirm hinzufügen“</strong> tippen.</p>'}
-    </div>`;
-  view.innerHTML = `
-    <section class="home">
-      <header class="home-head">
-        <p class="kicker">${esc(APP_NAME)}</p>
-        <h1 class="title title-sm">Hallo ${esc(p.name)}!</h1>
-        <p class="muted">${esc(couple?.name || '')}</p>
-      </header>
-      ${ornament}
-      <div class="card soon">
-        <h2>Hier entsteht euer Tagebuch</h2>
-        <p>Als Nächstes kommen dazu:</p>
-        <ol class="soon-list">
-          <li><strong>Runden &amp; Termine</strong> – wer ist wann dran, Terminfinder, Kalender-Abo</li>
-          <li><strong>Füttern</strong> – Fotos, Sprüche, Menü</li>
-          <li><strong>Das schöne Tagebuch</strong> zum Durchblättern</li>
-          <li><strong>Rezepte</strong> und Ideen je Land</li>
-          <li><strong>Abstimmung</strong> fürs nächste Land</li>
-        </ol>
-      </div>
-      ${installHint}
-      <footer class="foot">
-        <button type="button" class="link" data-act="tour">Rundgang ansehen</button>
-        <button type="button" class="link" data-act="who">Ich bin nicht ${esc(p.name)}</button>
-        <button type="button" class="link" data-act="logout">Abmelden</button>
-        <p class="muted small">Version ${VERSION}</p>
-      </footer>
-    </section>`;
-  view.querySelector('[data-act=tour]').addEventListener('click', () => runTour());
-  view.querySelector('[data-act=who]').addEventListener('click', () => showWho());
-  view.querySelector('[data-act=logout]').addEventListener('click', async () => {
+// ---------- Seiten ----------
+let busy = false;
+async function route(fresh = false) {
+  if (!me()) return showWho();
+  if (busy) return;
+  busy = true;
+  try {
+    if (fresh || !ctx.state) ctx.state = await getState();
+    const [, page, a, b, c] = (location.hash || '#/').split('/');
+    if (page === 'abend' && a) await renderEvening(view, a, b, (refreshState) => reloadEvening(a, refreshState));
+    else if (page === 'ideen' && a) renderIdeas(view, a, b || '', c || '');
+    else if (page === 'einsortieren') renderSort(view);
+    else { renderHome(view); wireHome(); }
+    queueBanner();
+  } catch (ex) {
+    handleError(ex);
+  } finally {
+    busy = false;
+  }
+}
+
+async function reloadEvening(id, refreshState = false) {
+  if (refreshState) ctx.state = await getState().catch(() => ctx.state);
+  const [, page, a] = (location.hash || '#/').split('/');
+  if (page === 'abend' && a === id) {
+    const y = scrollY;
+    await renderEvening(view, id, '', (r) => reloadEvening(id, r));
+    scrollTo(0, y);
+  }
+}
+
+function wireHome() {
+  view.querySelector('[data-act=tour]')?.addEventListener('click', () => runTour());
+  view.querySelector('[data-act=who]')?.addEventListener('click', () => showWho());
+  view.querySelector('[data-act=logout]')?.addEventListener('click', async () => {
     const r = await dialog({
       title: 'Abmelden?',
       body: '<p>Danach musst du auf diesem Handy den gemeinsamen Code neu eingeben.</p>',
       buttons: [{ label: 'Abbrechen', value: 'no' }, { label: 'Abmelden', value: 'yes', primary: true }],
     });
-    if (r?.value === 'yes') { logout(); people = null; showLogin(); }
+    if (r?.value === 'yes') { logout(); ctx.people = null; ctx.state = null; showLogin(); }
   });
+}
+
+// Hinweis „3 Fotos warten" oben auf der Startseite
+async function queueBanner(items) {
+  const box = document.getElementById('queue');
+  if (!box) return;
+  items = items || (await qAll().catch(() => []));
+  box.innerHTML = items.length
+    ? `<div class="card wait"><p><strong>${items.length} Foto${items.length > 1 ? 's' : ''} warten aufs Hochladen.</strong> Das passiert von selbst, sobald Netz da ist und die App offen ist.</p><button type="button" class="btn btn-small" id="retry-up">Jetzt versuchen</button></div>`
+    : '';
+  box.querySelector('#retry-up')?.addEventListener('click', () => flush());
+}
+onQueueChange((items) => queueBanner(items));
+
+function handleError(ex) {
+  if (ex instanceof ApiError && ex.status === 401) return showLogin('Bitte gib den Code noch einmal ein.');
+  view.innerHTML = `
+    <section class="gate">
+      <h1 class="title title-sm">Gerade keine Verbindung</h1>
+      ${ornament}
+      <p class="lead">${esc(ex.message)}</p>
+      <button type="button" class="btn btn-primary" id="retry">Nochmal versuchen</button>
+    </section>`;
+  view.querySelector('#retry').addEventListener('click', start);
 }
 
 // ---------- Ablauf ----------
 async function start() {
   if (!loggedIn()) return showLogin();
   try {
-    people = await getPeople();
+    ctx.people = await getPeople();
   } catch (ex) {
-    if (ex instanceof ApiError && ex.status === 401) return showLogin('Bitte gib den Code noch einmal ein.');
-    view.innerHTML = `
-      <section class="gate">
-        <h1 class="title title-sm">Gerade keine Verbindung</h1>
-        ${ornament}
-        <p class="lead">${esc(ex.message)}</p>
-        <button type="button" class="btn btn-primary" id="retry">Nochmal versuchen</button>
-      </section>`;
-    view.querySelector('#retry').addEventListener('click', start);
-    return;
+    return handleError(ex);
   }
   if (!me()) return showWho();
-  showHome();
-  // Nach einem Update einmal zeigen, was neu ist
+  await route(true);
+  flush();
   const list = unseen(store.get('newsSeen'));
   if (list.length && store.get('tourSeen')) {
     await showNews(list);
@@ -164,9 +165,9 @@ async function start() {
   }
 }
 
+addEventListener('hashchange', () => { scrollTo(0, 0); route(); });
+
 // ---------- Update-Prüfung (wie in der Film-App) ----------
-// Handys heben die Seite eine Weile auf. Beim Öffnen und beim Zurückkehren
-// in die App fragen wir kurz nach, ob es eine neue Version gibt, und laden sie.
 async function checkForUpdate() {
   if (location.hostname === 'localhost') return;
   try {
@@ -180,6 +181,14 @@ async function checkForUpdate() {
   } catch { /* offline – egal */ }
 }
 checkForUpdate();
-document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') checkForUpdate(); });
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'visible') return;
+  checkForUpdate();
+  const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '');
+  if (ctx.people && me() && !document.querySelector('dialog[open]') && !typing) {
+    const y = scrollY;
+    route(true).then(() => scrollTo(0, y));
+  }
+});
 
 start().catch((ex) => { console.error(ex); toast('Da ist etwas schiefgelaufen.'); });

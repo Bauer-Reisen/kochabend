@@ -1,11 +1,11 @@
 // Das schöne Tagebuch: Titelseite mit allen Ländern, je Land ein Kapitel mit seinen Abenden.
 // Nur zum Anschauen – gesammelt wird auf den Abend-Seiten.
-import * as api from './api.js?v=0.3.2';
-import { esc } from './ui.js?v=0.3.2';
-import { ctx, personName, coupleName, fmtDate, todayIso, kidsOf, agesText } from './ctx.js?v=0.3.2';
-import { kueche, GANG, findIdee } from './kuechen.js?v=0.3.2';
-import { ornament } from './ornament.js?v=0.3.2';
-import { musicLabel } from './evening.js?v=0.3.2';
+import * as api from './api.js?v=0.3.3';
+import { esc } from './ui.js?v=0.3.3';
+import { ctx, personName, coupleName, fmtDate, todayIso, kidsOf, agesText } from './ctx.js?v=0.3.3';
+import { kueche, GANG, findIdee } from './kuechen.js?v=0.3.3';
+import { ornament } from './ornament.js?v=0.3.3';
+import { musicLabel } from './evening.js?v=0.3.3';
 
 const year = (iso) => (iso ? iso.slice(0, 4) : '');
 // leichte, aber feste Schräglage je Foto (sieht bei jedem Öffnen gleich aus)
@@ -37,7 +37,7 @@ export function renderBook(view) {
               <span class="chapter-main">
                 <strong>${esc(r.name)}</strong>
                 ${k.orig ? `<span class="chapter-orig">${esc(k.orig)}</span>` : ''}
-                <span class="muted small">${dates.length ? esc(year(dates[0])) : ''}${done < evs.length ? ` · ${done} von ${evs.length} Abenden` : ''}</span>
+                <span class="muted small">${dates.length ? esc(year(dates[0])) : ''}${r.status !== 'fertig' && done < evs.length ? ` · ${done} von ${evs.length} Abenden` : ''}</span>
               </span>
               <span class="ev-go" aria-hidden="true">›</span>
             </a>

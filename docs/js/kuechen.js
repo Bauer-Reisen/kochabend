@@ -74,6 +74,15 @@ export const KUECHEN = {
       'Tzatziki ohne Knoblauch ist ein beliebter Dip für Gemüsesticks.',
     ],
   },
+  // Frühere Runden (aus dem alten Tagebuch) – Ideen folgen mit der großen Küchenliste
+  mexiko:     { name: 'Mexiko',     orig: 'México',     farben: ['#1f6b4a', '#f4efe3', '#c8452f'], musik: 'Mexikanische Musik' },
+  italien:    { name: 'Italien',    orig: 'Italia',     farben: ['#2f7a45', '#f4efe3', '#c7362f'], musik: 'Italienische Musik' },
+  japan:      { name: 'Japan',      orig: 'Nippon',     farben: ['#b8302f', '#f4efe3', '#e8b4b0'], musik: 'Japanische Musik' },
+  thailand:   { name: 'Thailand',   orig: 'Prathet Thai', farben: ['#2b3f86', '#f4efe3', '#b8333a'], musik: 'Thai Musik' },
+  kurdistan:  { name: 'Kurdistan',  orig: 'Kurdistan',  farben: ['#c48a1a', '#f4efe3', '#2f7a45'], musik: 'Kurdische Musik' },
+  frankreich: { name: 'Frankreich', orig: 'France',     farben: ['#2b4a8c', '#f4efe3', '#c23b3b'], musik: 'Französische Chansons' },
+  spanien:    { name: 'Spanien',    orig: 'España',     farben: ['#b8302f', '#f4efe3', '#e6b422'], musik: 'Spanische Musik' },
+  usa:        { name: 'USA',        orig: 'United States', farben: ['#24366e', '#f4efe3', '#b3303a'], musik: 'American Classics' },
 };
 
 export const GANG = { vor: 'Vorspeise', haupt: 'Hauptspeise', nach: 'Nachspeise' };

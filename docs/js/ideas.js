@@ -1,10 +1,10 @@
 // Ideen je Land und Gang – mit Kinder-Variante und Link zur Rezeptsuche.
 // Gastgeber können eine Idee direkt für ihren Abend übernehmen.
 // Was in dieser Küche schon gekocht wurde (offene Menüs), wird ausgeblendet und unten klein genannt.
-import * as api from './api.js?v=0.3.2';
-import { esc, toast } from './ui.js?v=0.3.2';
-import { me, eveningById, coupleName } from './ctx.js?v=0.3.2';
-import { kueche, GANG, suchLink } from './kuechen.js?v=0.3.2';
+import * as api from './api.js?v=0.3.3';
+import { esc, toast } from './ui.js?v=0.3.3';
+import { me, eveningById, coupleName } from './ctx.js?v=0.3.3';
+import { kueche, GANG, suchLink } from './kuechen.js?v=0.3.3';
 
 const ERST = 6; // so viele Ideen je Gang sofort, der Rest hinter „Noch mehr Ideen"
 
@@ -26,7 +26,7 @@ export async function renderIdeas(view, kuecheId, kind, eveningId) {
   const ev = eveningId ? eveningById(eveningId) : null;
   const canTake = ev && ev.host === me()?.couple;
   const back = ev ? `#/abend/${esc(ev.id)}` : '#/';
-  if (!k) {
+  if (!k || !k.ideen) {
     view.innerHTML = `<section class="page"><a class="back" href="${back}">‹ Zurück</a><p>Für diese Küche gibt es noch keine Ideen. Suche einfach bei <a href="${suchLink(kuecheId)}" target="_blank" rel="noopener">Chefkoch</a>.</p></section>`;
     return;
   }

@@ -1,14 +1,15 @@
 // Reiter „Termine": wer wann Gastgeber ist. Terminfinder und Kalender-Abo kommen hier dazu.
-import { esc } from './ui.js?v=0.3.2';
-import { ctx, coupleName, fmtDate, todayIso } from './ctx.js?v=0.3.2';
+import { esc } from './ui.js?v=0.3.3';
+import { ctx, coupleName, fmtDate, todayIso } from './ctx.js?v=0.3.3';
 
 export function renderDates(view) {
   const { rounds, evenings } = ctx.state;
   const t = todayIso();
   const roundName = (id) => rounds.find((r) => r.id === id)?.name || '';
   const sorted = evenings.slice().sort((a, b) => (a.date || '9999').localeCompare(b.date || '9999'));
-  const next = sorted.filter((e) => !e.date || e.date >= t);
-  const past = sorted.filter((e) => e.date && e.date < t).reverse();
+  const running = (e) => rounds.find((r) => r.id === e.round)?.status !== 'fertig';
+  const next = sorted.filter((e) => (e.date ? e.date >= t : running(e)));
+  const past = sorted.filter((e) => e.date && e.date < t).reverse().slice(0, 6); // ältere stehen im Tagebuch
   const row = (e) => `
     <li>
       <a href="#/abend/${esc(e.id)}" class="ev ${e.date && e.date < t ? 'past' : ''}">
@@ -37,8 +38,9 @@ export function renderDates(view) {
       </div>
       ${past.length ? `
       <section class="block">
-        <h2>Vergangen</h2>
+        <h2>Zuletzt</h2>
         <ol class="evenings">${past.map(row).join('')}</ol>
+        <a class="link" href="#/tagebuch">Alle früheren Abende im Tagebuch</a>
       </section>` : ''}
     </section>`;
 }

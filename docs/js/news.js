@@ -1,9 +1,16 @@
 // „Was ist neu?" – nach einem Update einmal, wenn man die App wieder öffnet.
 // Wer die App neu hat, bekommt stattdessen den Rundgang und sieht die alten Neuigkeiten nicht.
 // Neueste zuerst; nur Änderungen, die man sieht und kennen sollte (keine Reparaturen).
-import { dialog } from './ui.js?v=0.3.2';
+import { dialog } from './ui.js?v=0.3.3';
 
 export const NEWS = [
+  {
+    v: '0.3.3', title: 'Das alte Tagebuch ist drin',
+    items: [
+      'Im <strong>Tagebuch</strong> stehen jetzt alle früheren Runden seit dem ersten Taco-Abend im Oktober 2023: Mexiko, Italien, Japan, Thailand, Kurdistan, Frankreich, Spanien und USA – mit Menüs und Sprüchen.',
+      'Fehlt ein Datum oder ein Gericht? Abend öffnen und nachtragen – das darf bei vergangenen Abenden jede und jeder. Fotos von damals könnt ihr auch hochladen.',
+    ],
+  },
   {
     v: '0.3.2', title: 'Reiter unten',
     items: [

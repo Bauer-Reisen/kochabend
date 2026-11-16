@@ -1,5 +1,5 @@
 // Gemeinsamer Zustand und kleine Helfer für alle Seiten.
-import { store } from './api.js?v=0.3.2';
+import { store } from './api.js?v=0.3.3';
 
 export const ctx = { people: null, state: null };
 

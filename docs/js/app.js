@@ -1,20 +1,20 @@
 // Einstieg der App: Code eingeben → Name wählen → Seiten (Startseite, Abend, Ideen, Einsortieren).
-import { VERSION } from './config.js?v=0.3.4';
-import { store, login, loggedIn, logout, getPeople, getState, ApiError } from './api.js?v=0.3.4';
-import { esc, dialog, toast } from './ui.js?v=0.3.4';
-import { runTour } from './tour.js?v=0.3.4';
-import { unseen, showNews, NEWS } from './news.js?v=0.3.4';
-import { ctx, me } from './ctx.js?v=0.3.4';
-import { ornament } from './ornament.js?v=0.3.4';
-import { renderHome } from './home.js?v=0.3.4';
-import { renderEvening } from './evening.js?v=0.3.4';
-import { renderIdeas } from './ideas.js?v=0.3.4';
-import { renderSort } from './sort.js?v=0.3.4';
-import { renderMore } from './mehr.js?v=0.3.4';
-import { renderDates } from './termine.js?v=0.3.4';
-import { renderTabs, hideTabs } from './tabs.js?v=0.3.4';
-import { renderBook, renderChapter } from './tagebuch.js?v=0.3.4';
-import { qAll, onQueueChange, flush } from './photos.js?v=0.3.4';
+import { VERSION } from './config.js?v=0.3.5';
+import { store, login, loggedIn, logout, getPeople, getState, ApiError } from './api.js?v=0.3.5';
+import { esc, dialog, toast } from './ui.js?v=0.3.5';
+import { runTour } from './tour.js?v=0.3.5';
+import { unseen, showNews, NEWS } from './news.js?v=0.3.5';
+import { ctx, me } from './ctx.js?v=0.3.5';
+import { ornament } from './ornament.js?v=0.3.5';
+import { renderHome } from './home.js?v=0.3.5';
+import { renderEvening } from './evening.js?v=0.3.5';
+import { renderIdeas } from './ideas.js?v=0.3.5';
+import { renderSort } from './sort.js?v=0.3.5';
+import { renderMore } from './mehr.js?v=0.3.5';
+import { renderDates } from './termine.js?v=0.3.5';
+import { renderTabs, hideTabs } from './tabs.js?v=0.3.5';
+import { renderBook, renderChapter } from './tagebuch.js?v=0.3.5';
+import { qAll, onQueueChange, flush } from './photos.js?v=0.3.5';
 
 const view = document.getElementById('view');
 const scroller = document.getElementById('scroller'); // nur dieser Bereich scrollt (fester Rahmen)
@@ -186,7 +186,31 @@ async function start() {
   }
 }
 
-addEventListener('hashchange', () => { scroller.scrollTo(0, 0); route(); });
+// ---------- „Zurück" = einen Schritt zurück ----------
+// Jede Seite in der App bekommt eine Nummer (im Browser-Verlauf gemerkt). Der Zurück-Knopf oben
+// geht dann einfach einen Schritt zurück – und an dieselbe Stelle auf der Seite.
+const scrollPos = {};
+const stepNr = () => history.state?.step;
+if (stepNr() === undefined) history.replaceState({ step: 0 }, '');
+let curStep = stepNr();
+
+addEventListener('hashchange', async () => {
+  scrollPos[curStep] = scroller.scrollTop; // Stelle der Seite merken, die wir gerade verlassen
+  let back = true;
+  if (stepNr() === undefined) { history.replaceState({ step: curStep + 1 }, ''); back = false; }
+  curStep = stepNr();
+  const y = back ? scrollPos[curStep] || 0 : 0; // vorher merken, scrollTo unten überschreibt es sonst
+  scroller.scrollTo(0, 0);
+  await route();
+  if (y) { scroller.scrollTo(0, y); scrollPos[curStep] = y; }
+});
+
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a.back');
+  if (!a || !(stepNr() > 0)) return; // ganz am Anfang: normaler Link als Ausweg
+  e.preventDefault();
+  history.back();
+});
 
 // ---------- Update-Prüfung (wie in der Film-App) ----------
 async function checkForUpdate() {

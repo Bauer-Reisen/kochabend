@@ -1,11 +1,11 @@
 // Das schöne Tagebuch: Titelseite mit allen Ländern, je Land ein Kapitel mit seinen Abenden.
 // Nur zum Anschauen – gesammelt wird auf den Abend-Seiten.
-import * as api from './api.js?v=0.3.4';
-import { esc } from './ui.js?v=0.3.4';
-import { ctx, personName, coupleName, fmtDate, todayIso, kidsOf, agesText } from './ctx.js?v=0.3.4';
-import { kueche, GANG, findIdee } from './kuechen.js?v=0.3.4';
-import { ornament } from './ornament.js?v=0.3.4';
-import { musicLabel } from './evening.js?v=0.3.4';
+import * as api from './api.js?v=0.3.5';
+import { esc } from './ui.js?v=0.3.5';
+import { ctx, personName, coupleName, fmtDate, todayIso, kidsOf, agesText } from './ctx.js?v=0.3.5';
+import { kueche, GANG, findIdee } from './kuechen.js?v=0.3.5';
+import { ornament } from './ornament.js?v=0.3.5';
+import { musicLabel } from './evening.js?v=0.3.5';
 
 const year = (iso) => (iso ? iso.slice(0, 4) : '');
 // leichte, aber feste Schräglage je Foto (sieht bei jedem Öffnen gleich aus)
@@ -50,7 +50,7 @@ export function renderBook(view) {
 // ---------- Kapitel eines Landes ----------
 export async function renderChapter(view, roundId) {
   const r = ctx.state.rounds.find((x) => x.id === roundId);
-  if (!r) { view.innerHTML = '<section class="page"><a class="back" href="#/tagebuch">‹ Tagebuch</a><p>Dieses Kapitel gibt es nicht.</p></section>'; return; }
+  if (!r) { view.innerHTML = '<section class="page"><a class="back" href="#/tagebuch">‹ Zurück</a><p>Dieses Kapitel gibt es nicht.</p></section>'; return; }
   const k = kueche(r.kueche) || {};
   const evs = ctx.state.evenings.filter((e) => e.round === r.id).sort((a, b) => a.nr - b.nr);
   view.innerHTML = '<p class="loading">Blättere …</p>';
@@ -58,7 +58,7 @@ export async function renderChapter(view, roundId) {
 
   view.innerHTML = `
     <section class="page chapter-page" style="--land:${esc(k.farben?.[0] || '#b5532f')}; --land2:${esc(k.farben?.[2] || '#e6c9b8')}">
-      <a class="back" href="#/tagebuch">‹ Tagebuch</a>
+      <a class="back" href="#/tagebuch">‹ Zurück</a>
       <header class="chapter-head">
         <p class="kicker">Kapitel ${ctx.state.rounds.indexOf(r) + 1}</p>
         <h1 class="title">${esc(r.name)}</h1>

@@ -1,9 +1,15 @@
 // „Was ist neu?" – nach einem Update einmal, wenn man die App wieder öffnet.
 // Wer die App neu hat, bekommt stattdessen den Rundgang und sieht die alten Neuigkeiten nicht.
 // Neueste zuerst; nur Änderungen, die man sieht und kennen sollte (keine Reparaturen).
-import { dialog } from './ui.js?v=0.3.4';
+import { dialog } from './ui.js?v=0.3.5';
 
 export const NEWS = [
+  {
+    v: '0.3.5', title: 'Zurück heißt jetzt: ein Schritt zurück',
+    items: [
+      'Der Knopf <strong>‹ Zurück</strong> oben bringt dich dorthin, wo du vorher warst – zum Beispiel aus einem Abend zurück ins Kapitel im Tagebuch, an dieselbe Stelle.',
+    ],
+  },
   {
     v: '0.3.3', title: 'Das alte Tagebuch ist drin',
     items: [

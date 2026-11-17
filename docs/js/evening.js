@@ -1,9 +1,9 @@
 // Seite eines Abends: Menü, Kinder, Fotos, Sprüche, Eindrücke.
-import * as api from './api.js?v=0.3.4';
-import { esc, dialog, toast } from './ui.js?v=0.3.4';
-import { ctx, me, personName, coupleName, kidsOf, agesText, fmtDate, eveningForTime, roundOf } from './ctx.js?v=0.3.4';
-import { kueche, GANG, findIdee } from './kuechen.js?v=0.3.4';
-import { addPhotos, readTakenTime, qAll, onQueueChange } from './photos.js?v=0.3.4';
+import * as api from './api.js?v=0.3.5';
+import { esc, dialog, toast } from './ui.js?v=0.3.5';
+import { ctx, me, personName, coupleName, kidsOf, agesText, fmtDate, eveningForTime, roundOf } from './ctx.js?v=0.3.5';
+import { kueche, GANG, findIdee } from './kuechen.js?v=0.3.5';
+import { addPhotos, readTakenTime, qAll, onQueueChange } from './photos.js?v=0.3.5';
 
 const linkify = (s) => esc(s).replace(/https?:\/\/[^\s<]+/g, (u) => `<a href="${u}" target="_blank" rel="noopener">${u.length > 40 ? u.slice(0, 38) + '…' : u}</a>`).replace(/\n/g, '<br>');
 
@@ -26,7 +26,7 @@ export async function renderEvening(view, id, action, reload) {
 
   view.innerHTML = `
     <section class="page evening" style="--land:${esc(k.farben?.[0] || '#b5532f')}">
-      <a class="back" href="#/">‹ Übersicht</a>
+      <a class="back" href="${round.status === 'fertig' ? `#/tagebuch/${esc(round.id)}` : '#/'}">‹ Zurück</a>
       <header class="ev-head">
         <p class="kicker">${esc(round.name || '')} · Abend ${ev.nr}</p>
         <h1 class="title title-sm">${esc(coupleName(ev.host))}</h1>
@@ -93,7 +93,7 @@ export async function renderEvening(view, id, action, reload) {
   });
 
   if (action === 'fotos') view.querySelector('#fotos')?.scrollIntoView({ behavior: 'smooth' });
-  if (action === 'spruch') { history.replaceState(null, '', `#/abend/${ev.id}`); addQuoteDialog(ev, reload); }
+  if (action === 'spruch') { history.replaceState(history.state, '', `#/abend/${ev.id}`); addQuoteDialog(ev, reload); }
 }
 
 // ---------- Kinder ----------

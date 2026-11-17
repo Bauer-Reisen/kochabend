@@ -30,6 +30,7 @@ Plan: siehe PLAN.md. Nach jedem Abschnitt: veröffentlichen, Link + Testpunkte n
 - [x] **0.3.1** (16.11.2026): Vergangene Abende: alle dürfen das Menü nachtragen/ändern (Worker `canEditMenu = isHost || past`), Kinder-Frage in Vergangenheit („Wart ihr …“), Tagebuch zeigt Kinder (Alter am Abend) und „Für die Kinder“ im Menü.
 - [x] **0.3.2** (16.11.2026): Reiterleiste unten (tabs.js): Jetzt · Tagebuch · Termine (termine.js: wer wann kocht, Platz für Terminfinder/Kalender-Abo) · Ideen · Mehr (mehr.js: Einsortieren, Home-Bildschirm, Rundgang, Name, Abmelden). Startseite = nur laufende Runde.
 - [x] **0.3.4** (17.11.2026): Fester Rahmen gegen hüpfende Leiste (iPhone, Meldung der Nutzerin): html/body overflow hidden, body Flex-Spalte, nur #scroller (bzw. .hauptseite > .seite) scrollt, Leiste nicht mehr position:fixed, sondern im Aufbau darunter (Film: Tabs bleiben fixed, Scroller endet darüber). Alle scrollTo/scrollY auf den Scroller umgestellt. Gemessen 375×812: Fenster scrollt nicht, Leiste bleibt bei 0 px Versatz, Inhalt endet an der Leiste.
+- [x] **0.3.5** (17.11.2026): „‹ Zurück" überall = history.back() mit Schrittnummer in history.state (app.js), Scrollstelle wird je Schritt gemerkt und wiederhergestellt. Ohne vorherigen Schritt gilt der Link (Abend fertiger Runde → Kapitel, sonst Jetzt).
 - [ ] 4 – Rezepte
 - [ ] 5 – Abstimmung (bis zum letzten Griechenland-Abend)
 - [ ] 6 – Sicherung & Feinschliff

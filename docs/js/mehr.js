@@ -1,8 +1,8 @@
 // Reiter „Mehr": Fotos einsortieren, App-Hinweis, Rundgang, Name wechseln, Abmelden.
-import { VERSION } from './config.js?v=0.3.3';
-import { esc } from './ui.js?v=0.3.3';
-import { me } from './ctx.js?v=0.3.3';
-import { installHint } from './home.js?v=0.3.3';
+import { VERSION } from './config.js?v=0.3.4';
+import { esc } from './ui.js?v=0.3.4';
+import { me } from './ctx.js?v=0.3.4';
+import { installHint } from './home.js?v=0.3.4';
 
 export function renderMore(view) {
   const p = me();

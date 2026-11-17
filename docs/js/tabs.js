@@ -1,6 +1,6 @@
 // Reiterleiste unten: Jetzt · Tagebuch · Termine · Ideen · Mehr
-import { esc } from './ui.js?v=0.3.3';
-import { ctx } from './ctx.js?v=0.3.3';
+import { esc } from './ui.js?v=0.3.4';
+import { ctx } from './ctx.js?v=0.3.4';
 
 const ICON = {
   jetzt: '<path d="M4 11h16M6 11c0 4 2.7 7 6 7s6-3 6-7"/><path d="M9 7c0-1 1-1.5 1-2.5M13 7c0-1 1-1.5 1-2.5"/>',

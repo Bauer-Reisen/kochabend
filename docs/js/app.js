@@ -1,22 +1,23 @@
 // Einstieg der App: Code eingeben → Name wählen → Seiten (Startseite, Abend, Ideen, Einsortieren).
-import { VERSION } from './config.js?v=0.3.3';
-import { store, login, loggedIn, logout, getPeople, getState, ApiError } from './api.js?v=0.3.3';
-import { esc, dialog, toast } from './ui.js?v=0.3.3';
-import { runTour } from './tour.js?v=0.3.3';
-import { unseen, showNews, NEWS } from './news.js?v=0.3.3';
-import { ctx, me } from './ctx.js?v=0.3.3';
-import { ornament } from './ornament.js?v=0.3.3';
-import { renderHome } from './home.js?v=0.3.3';
-import { renderEvening } from './evening.js?v=0.3.3';
-import { renderIdeas } from './ideas.js?v=0.3.3';
-import { renderSort } from './sort.js?v=0.3.3';
-import { renderMore } from './mehr.js?v=0.3.3';
-import { renderDates } from './termine.js?v=0.3.3';
-import { renderTabs, hideTabs } from './tabs.js?v=0.3.3';
-import { renderBook, renderChapter } from './tagebuch.js?v=0.3.3';
-import { qAll, onQueueChange, flush } from './photos.js?v=0.3.3';
+import { VERSION } from './config.js?v=0.3.4';
+import { store, login, loggedIn, logout, getPeople, getState, ApiError } from './api.js?v=0.3.4';
+import { esc, dialog, toast } from './ui.js?v=0.3.4';
+import { runTour } from './tour.js?v=0.3.4';
+import { unseen, showNews, NEWS } from './news.js?v=0.3.4';
+import { ctx, me } from './ctx.js?v=0.3.4';
+import { ornament } from './ornament.js?v=0.3.4';
+import { renderHome } from './home.js?v=0.3.4';
+import { renderEvening } from './evening.js?v=0.3.4';
+import { renderIdeas } from './ideas.js?v=0.3.4';
+import { renderSort } from './sort.js?v=0.3.4';
+import { renderMore } from './mehr.js?v=0.3.4';
+import { renderDates } from './termine.js?v=0.3.4';
+import { renderTabs, hideTabs } from './tabs.js?v=0.3.4';
+import { renderBook, renderChapter } from './tagebuch.js?v=0.3.4';
+import { qAll, onQueueChange, flush } from './photos.js?v=0.3.4';
 
 const view = document.getElementById('view');
+const scroller = document.getElementById('scroller'); // nur dieser Bereich scrollt (fester Rahmen)
 
 // ---------- 1. Code eingeben ----------
 function showLogin(message = '') {
@@ -123,9 +124,9 @@ async function reloadEvening(id, refreshState = false) {
   if (refreshState) ctx.state = await getState().catch(() => ctx.state);
   const [, page, a] = (location.hash || '#/').split('/');
   if (page === 'abend' && a === id) {
-    const y = scrollY;
+    const y = scroller.scrollTop;
     await renderEvening(view, id, '', (r) => reloadEvening(id, r));
-    scrollTo(0, y);
+    scroller.scrollTo(0, y);
   }
 }
 
@@ -185,7 +186,7 @@ async function start() {
   }
 }
 
-addEventListener('hashchange', () => { scrollTo(0, 0); route(); });
+addEventListener('hashchange', () => { scroller.scrollTo(0, 0); route(); });
 
 // ---------- Update-Prüfung (wie in der Film-App) ----------
 async function checkForUpdate() {
@@ -206,8 +207,8 @@ document.addEventListener('visibilitychange', () => {
   checkForUpdate();
   const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '');
   if (ctx.people && me() && !document.querySelector('dialog[open]') && !typing) {
-    const y = scrollY;
-    route(true).then(() => scrollTo(0, y));
+    const y = scroller.scrollTop;
+    route(true).then(() => scroller.scrollTo(0, y));
   }
 });
 

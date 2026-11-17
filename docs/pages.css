@@ -180,3 +180,12 @@ body.has-tabs .toast { bottom: calc(env(safe-area-inset-bottom) + 84px); }
 .date-box span { font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; }
 .soon h3 { margin-bottom: .3em; }
 .soon p { margin: .4em 0; }
+
+/* ===== Fester Rahmen (gegen hüpfende Leiste auf dem iPhone) =====
+   Die Seite selbst scrollt nicht mehr. Nur der Bereich #scroller zwischen Kopf und Leiste scrollt,
+   die Leiste steht im normalen Seitenaufbau und kann sich deshalb nicht bewegen. */
+html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
+body { min-height: 0; display: flex; flex-direction: column; }
+.scroller { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior-y: contain; -webkit-overflow-scrolling: touch; }
+.tabbar { position: relative; flex: none; }
+body.has-tabs .view { padding-bottom: 32px; }

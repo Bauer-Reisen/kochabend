@@ -1,7 +1,7 @@
 // „Was ist neu?" – nach einem Update einmal, wenn man die App wieder öffnet.
 // Wer die App neu hat, bekommt stattdessen den Rundgang und sieht die alten Neuigkeiten nicht.
 // Neueste zuerst; nur Änderungen, die man sieht und kennen sollte (keine Reparaturen).
-import { dialog } from './ui.js?v=0.3.3';
+import { dialog } from './ui.js?v=0.3.4';
 
 export const NEWS = [
   {

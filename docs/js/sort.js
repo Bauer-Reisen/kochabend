@@ -1,7 +1,7 @@
 // Viele Fotos auf einmal: die App liest das Aufnahmedatum und ordnet jedes Foto dem passenden Abend zu.
-import { esc, toast } from './ui.js?v=0.3.3';
-import { ctx, coupleName, fmtDate, eveningForTime, roundOf } from './ctx.js?v=0.3.3';
-import { readTakenTime, addPhotos } from './photos.js?v=0.3.3';
+import { esc, toast } from './ui.js?v=0.3.4';
+import { ctx, coupleName, fmtDate, eveningForTime, roundOf } from './ctx.js?v=0.3.4';
+import { readTakenTime, addPhotos } from './photos.js?v=0.3.4';
 
 export function renderSort(view) {
   view.innerHTML = `

@@ -3,7 +3,7 @@
 // - Das Foto wird neu gezeichnet: dabei fallen alle versteckten Zusatzangaben weg, auch der Standort.
 // - Groß (1600 px) für die Ansicht, klein (480 px) für die Übersicht.
 // - Warteschlange im Handy: ohne Netz bleibt alles liegen und wird später hochgeladen.
-import { uploadPhoto, newId } from './api.js?v=0.3.5';
+import { uploadPhoto, newId } from './api.js?v=0.3.6';
 
 const BIG = 1600;
 const SMALL = 480;

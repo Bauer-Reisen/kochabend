@@ -1,10 +1,11 @@
 // Ideen je Land und Gang – mit Kinder-Variante und Link zur Rezeptsuche.
 // Gastgeber können eine Idee direkt für ihren Abend übernehmen.
 // Was in dieser Küche schon gekocht wurde (offene Menüs), wird ausgeblendet und unten klein genannt.
-import * as api from './api.js?v=0.3.6';
-import { esc, toast } from './ui.js?v=0.3.6';
-import { me, eveningById, coupleName } from './ctx.js?v=0.3.6';
-import { kueche, GANG, suchLink } from './kuechen.js?v=0.3.6';
+import * as api from './api.js?v=0.4.0';
+import { esc, toast } from './ui.js?v=0.4.0';
+import { me, eveningById, coupleName } from './ctx.js?v=0.4.0';
+import { kueche, GANG, suchLink } from './kuechen.js?v=0.4.0';
+import { groupMenu, flatMenu } from './menu.js?v=0.4.0';
 
 const ERST = 6; // so viele Ideen je Gang sofort, der Rest hinter „Noch mehr Ideen"
 
@@ -97,12 +98,13 @@ export async function renderIdeas(view, kuecheId, kind, eveningId) {
     const idee = k.ideen[g].find((i) => i.id === b.dataset.take);
     try {
       const cur = await api.getEvening(ev.id);
-      const courses = ['vor', 'haupt', 'nach'].map((kd) => {
-        const c = cur.courses.find((x) => x.kind === kd) || { kind: kd, name: '', note: '', kids_note: '', idea_id: null };
-        return kd === g ? { ...c, kind: kd, name: idee.name, idea_id: idee.id, kids_note: c.kids_note || idee.kids } : c;
-      });
-      await api.saveCourses(ev.id, courses);
-      toast(`„${idee.name}“ als ${GANG[g]} eingetragen`);
+      // Die Idee kommt als weiteres Gericht in den Gang (vorhandene bleiben stehen)
+      const gaenge = groupMenu(cur.courses);
+      const gang = gaenge.find((x) => x.kind === g);
+      gang.dishes.push({ name: idee.name, note: '', idea_id: idee.id });
+      if (!gang.kids && idee.kids) gang.kids = idee.kids;
+      await api.saveCourses(ev.id, flatMenu(gaenge));
+      toast(`„${idee.name}“ zur ${GANG[g]} dazugenommen`);
       location.hash = `#/abend/${ev.id}`;
     } catch (ex) {
       toast(ex.message, 4000);

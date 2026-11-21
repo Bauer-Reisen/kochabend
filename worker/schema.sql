@@ -61,17 +61,19 @@ CREATE TABLE IF NOT EXISTS evenings (
   version     INTEGER NOT NULL DEFAULT 1
 );
 
--- Gänge: vor | haupt | nach
+-- Gerichte: je Gang (apero | vor | zwischen | haupt | nach | absacker) mehrere, Reihenfolge = pos.
+-- „Für die Kinder" steht beim ersten Gericht (pos 0) des Gangs.
 CREATE TABLE IF NOT EXISTS courses (
   evening_id TEXT NOT NULL REFERENCES evenings(id),
   kind       TEXT NOT NULL,
-  name       TEXT NOT NULL DEFAULT '',
+  pos        INTEGER NOT NULL DEFAULT 0,
+  name      TEXT NOT NULL DEFAULT '',
   note       TEXT NOT NULL DEFAULT '',
   kids_note  TEXT NOT NULL DEFAULT '',
   idea_id    TEXT,
   updated_by TEXT,
   updated    INTEGER,
-  PRIMARY KEY (evening_id, kind)
+  PRIMARY KEY (evening_id, kind, pos)
 );
 
 -- Wer kommt mit Kindern? (je Abend und Gast-Paar; NULL = noch nicht gesagt)

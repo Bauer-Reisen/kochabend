@@ -1,6 +1,6 @@
 // Reiter „Termine": wer wann Gastgeber ist. Terminfinder und Kalender-Abo kommen hier dazu.
-import { esc } from './ui.js?v=0.3.6';
-import { ctx, coupleName, fmtDate, todayIso } from './ctx.js?v=0.3.6';
+import { esc } from './ui.js?v=0.4.0';
+import { ctx, coupleName, fmtDate, todayIso } from './ctx.js?v=0.4.0';
 
 export function renderDates(view) {
   const { rounds, evenings } = ctx.state;

@@ -1,6 +1,6 @@
 // Rundgang beim allerersten Öffnen: ein paar Karten, jederzeit überspringbar.
 // Lässt sich unten auf der Startseite („Rundgang ansehen") wieder aufrufen.
-import { dialog, esc } from './ui.js?v=0.3.6';
+import { dialog, esc } from './ui.js?v=0.4.0';
 
 const STEPS = [
   {

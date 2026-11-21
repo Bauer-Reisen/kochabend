@@ -1,9 +1,16 @@
 // „Was ist neu?" – nach einem Update einmal, wenn man die App wieder öffnet.
 // Wer die App neu hat, bekommt stattdessen den Rundgang und sieht die alten Neuigkeiten nicht.
 // Neueste zuerst; nur Änderungen, die man sieht und kennen sollte (keine Reparaturen).
-import { dialog } from './ui.js?v=0.3.6';
+import { dialog } from './ui.js?v=0.4.0';
 
 export const NEWS = [
+  {
+    v: '0.4.0', title: 'Menü so, wie ihr kocht',
+    items: [
+      'Jeder Gang kann jetzt <strong>mehrere Gerichte</strong> haben: unter dem Gang auf <strong>„+ weiteres Gericht"</strong> tippen. Mit den Pfeilen ↑ ↓ änderst du die Reihenfolge, mit ✕ löschst du ein Gericht.',
+      'Weitere Gänge gibt es unter <strong>„Gang dazu"</strong>: Aperitif, Zwischengang und Absacker &amp; Kaffee.',
+    ],
+  },
   {
     v: '0.3.5', title: 'Zurück heißt jetzt: ein Schritt zurück',
     items: [

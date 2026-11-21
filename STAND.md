@@ -34,3 +34,4 @@ Plan: siehe PLAN.md. Nach jedem Abschnitt: veröffentlichen, Link + Testpunkte n
 - [ ] 4 – Rezepte
 - [ ] 5 – Abstimmung (bis zum letzten Griechenland-Abend)
 - [ ] 6 – Sicherung & Feinschliff
+- [x] **Version 0.3.6** (19.11.2026, live): Rundgang: Punkte oben antippbar (springt zu der Karte), ab Karte 2 „← Zurück“ statt „Überspringen“, dazu kleiner Link „Rundgang überspringen“ (Wunsch 19.11.2026, in allen Apps gleich). Umsetzung in tour.js wie Film-App.

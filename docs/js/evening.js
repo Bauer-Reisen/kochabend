@@ -1,11 +1,11 @@
 // Seite eines Abends: Menü, Kinder, Fotos, Sprüche, Eindrücke.
-import * as api from './api.js?v=0.3.6';
-import { esc, dialog, toast } from './ui.js?v=0.3.6';
-import { ctx, me, personName, coupleName, kidsOf, agesText, fmtDate, eveningForTime, roundOf } from './ctx.js?v=0.3.6';
-import { kueche, GANG, findIdee } from './kuechen.js?v=0.3.6';
-import { addPhotos, readTakenTime, qAll, onQueueChange } from './photos.js?v=0.3.6';
+import * as api from './api.js?v=0.4.0';
+import { esc, dialog, toast } from './ui.js?v=0.4.0';
+import { ctx, me, personName, coupleName, kidsOf, agesText, fmtDate, eveningForTime, roundOf } from './ctx.js?v=0.4.0';
+import { kueche, GANG, GAENGE, GRUND_GAENGE } from './kuechen.js?v=0.4.0';
+import { groupMenu, flatMenu, menuCardHtml, hasMenu, linkify } from './menu.js?v=0.4.0';
+import { addPhotos, readTakenTime, qAll, onQueueChange } from './photos.js?v=0.4.0';
 
-const linkify = (s) => esc(s).replace(/https?:\/\/[^\s<]+/g, (u) => `<a href="${u}" target="_blank" rel="noopener">${u.length > 40 ? u.slice(0, 38) + '…' : u}</a>`).replace(/\n/g, '<br>');
 
 let data = null;
 let unsub = null;
@@ -120,32 +120,106 @@ function kidsSection(ev, my) {
 }
 
 // ---------- Menü ----------
+// Ein Gericht im Formular: Name, Notiz, Pfeile zum Verschieben, Löschen
+function dishRow(d, past) {
+  return `
+    <div class="dish">
+      <div class="dish-top">
+        <input type="text" data-f="name" value="${esc(d.name)}" placeholder="${past ? 'Was gab es?' : 'Was gibt es?'}" maxlength="120" aria-label="Gericht">
+        <button type="button" class="dish-btn" data-dish="up" aria-label="Nach oben">↑</button>
+        <button type="button" class="dish-btn" data-dish="down" aria-label="Nach unten">↓</button>
+        <button type="button" class="dish-btn" data-dish="del" aria-label="Gericht löschen">✕</button>
+      </div>
+      <textarea data-f="note" rows="1" placeholder="Notiz oder Rezept-Link (optional)" maxlength="2000">${esc(d.note)}</textarea>
+      <input type="hidden" data-f="idea" value="${esc(d.idea_id || '')}">
+    </div>`;
+}
+
+function courseBox(g, ev, round) {
+  const dishes = g.dishes.length ? g.dishes : [{ name: '', note: '', idea_id: null }];
+  const extra = !GRUND_GAENGE.includes(g.kind);
+  return `
+    <fieldset class="course" data-kind="${g.kind}">
+      <legend>${GANG[g.kind]}</legend>
+      <div class="dishes">${dishes.map((d) => dishRow(d, ev.past)).join('')}</div>
+      <button type="button" class="link small" data-add-dish>+ weiteres Gericht</button>
+      <textarea data-f="kids" rows="1" placeholder="Für die Kinder (optional)" maxlength="1000">${esc(g.kids)}</textarea>
+      ${!extra && round.kueche ? `<a class="link small" href="#/ideen/${esc(round.kueche)}/${g.kind}/${esc(ev.id)}">Ideen für die ${GANG[g.kind]}</a>` : ''}
+      ${extra ? '<button type="button" class="link small" data-del-course>Gang entfernen</button>' : ''}
+    </fieldset>`;
+}
+
+function addCourseButtons(shown) {
+  const missing = GAENGE.filter((k) => !shown.includes(k));
+  return missing.length
+    ? `<p class="add-course"><span class="muted small">Gang dazu:</span> ${missing.map((k) => `<button type="button" class="chip" data-add-course="${k}">+ ${GANG[k]}</button>`).join('')}</p>`
+    : '';
+}
+
 function menuForm(ev, round) {
-  const c = (kind) => data.courses.find((x) => x.kind === kind) || { kind, name: '', note: '', kids_note: '' };
   const kidsComing = data.attendance.filter((a) => a.with_kids === 1).map((a) => `${coupleName(a.couple)} (${agesText(kidsOf(a.couple, ev.past ? ev.date : null))})`);
+  const gaenge = groupMenu(data.courses).filter((g) => GRUND_GAENGE.includes(g.kind) || g.dishes.length || g.kids);
   return `
       ${kidsComing.length ? `<p class="note">👧 ${ev.past ? 'Mit Kindern da' : 'Mit Kindern'}: ${esc(kidsComing.join(', '))}</p>` : ''}
       <form class="menu-form" data-form="menu">
-        ${['vor', 'haupt', 'nach'].map((kind) => {
-          const x = c(kind);
-          return `
-          <fieldset class="course">
-            <legend>${GANG[kind]}</legend>
-            <input type="text" name="${kind}-name" value="${esc(x.name)}" placeholder="${ev.past ? 'Was gab es?' : 'Was gibt es?'}" maxlength="120">
-            <textarea name="${kind}-note" rows="2" placeholder="Notiz oder Rezept-Link (optional)" maxlength="2000">${esc(x.note)}</textarea>
-            <textarea name="${kind}-kids" rows="1" placeholder="Für die Kinder (optional)" maxlength="1000">${esc(x.kids_note)}</textarea>
-            <input type="hidden" name="${kind}-idea" value="${esc(x.idea_id || '')}">
-            ${round.kueche ? `<a class="link small" href="#/ideen/${esc(round.kueche)}/${kind}/${esc(ev.id)}">Ideen für die ${GANG[kind]}</a>` : ''}
-          </fieldset>`;
-        }).join('')}
+        <div data-courses>${gaenge.map((g) => courseBox(g, ev, round)).join('')}</div>
+        <div data-add-courses>${addCourseButtons(gaenge.map((g) => g.kind))}</div>
         <button type="submit" class="btn btn-wide">Menü speichern</button>
       </form>`;
+}
+
+// Formular → Zeilen zum Speichern
+function readMenuForm(form) {
+  return flatMenu([...form.querySelectorAll('fieldset[data-kind]')].map((fs) => ({
+    kind: fs.dataset.kind,
+    kids: fs.querySelector('[data-f=kids]').value,
+    dishes: [...fs.querySelectorAll('.dish')].map((d) => ({
+      name: d.querySelector('[data-f=name]').value,
+      note: d.querySelector('[data-f=note]').value,
+      idea_id: d.querySelector('[data-f=idea]').value || null,
+    })),
+  })));
+}
+
+// Knöpfe im Formular: Gericht dazu, verschieben, löschen, Gang dazu/weg
+function wireMenuForm(form, ev, round) {
+  const shown = () => [...form.querySelectorAll('fieldset[data-kind]')].map((fs) => fs.dataset.kind);
+  const refreshAdd = () => { form.querySelector('[data-add-courses]').innerHTML = addCourseButtons(shown()); };
+  form.addEventListener('click', (e) => {
+    const b = e.target.closest('button');
+    if (!b || b.type === 'submit') return;
+    const fs = b.closest('fieldset');
+    const dish = b.closest('.dish');
+    if (b.matches('[data-add-dish]')) {
+      fs.querySelector('.dishes').insertAdjacentHTML('beforeend', dishRow({ name: '', note: '' }, ev.past));
+      fs.querySelector('.dish:last-child [data-f=name]').focus();
+    } else if (b.dataset.dish === 'up' && dish.previousElementSibling) {
+      dish.parentNode.insertBefore(dish, dish.previousElementSibling);
+    } else if (b.dataset.dish === 'down' && dish.nextElementSibling) {
+      dish.parentNode.insertBefore(dish.nextElementSibling, dish);
+    } else if (b.dataset.dish === 'del') {
+      if (fs.querySelectorAll('.dish').length > 1) dish.remove();
+      else dish.querySelectorAll('[data-f]').forEach((el) => { el.value = ''; });
+    } else if (b.matches('[data-add-course]')) {
+      const kind = b.dataset.addCourse;
+      const html = courseBox({ kind, dishes: [], kids: '' }, ev, round);
+      const after = GAENGE.slice(GAENGE.indexOf(kind) + 1);
+      const next = [...form.querySelectorAll('fieldset[data-kind]')].find((x) => after.includes(x.dataset.kind));
+      if (next) next.insertAdjacentHTML('beforebegin', html);
+      else form.querySelector('[data-courses]').insertAdjacentHTML('beforeend', html);
+      refreshAdd();
+      form.querySelector(`fieldset[data-kind=${kind}] [data-f=name]`).focus();
+    } else if (b.matches('[data-del-course]')) {
+      fs.remove();
+      refreshAdd();
+    }
+  });
 }
 
 function menuSection(ev, round) {
   // Nach dem Abend: nichts mehr geheim, alle dürfen das Menü nachtragen oder ändern
   if (ev.past) {
-    const has = data.courses.some((c) => c.name);
+    const has = hasMenu(data.courses);
     return `
       ${has ? menuCard() + '<p class="center"><button type="button" class="link small" data-act="edit-menu">Menü ändern</button></p>'
         : '<p class="muted">Noch kein Menü eingetragen. Der Abend ist vorbei – jede und jeder kann es nachtragen.</p>'}
@@ -160,25 +234,11 @@ function menuSection(ev, round) {
   if (!ev.menuOpen) {
     return `<p class="secret">🤫 Das Menü ist noch geheim.<br><span class="muted">${esc(coupleName(ev.host))} geben es am Abend frei.${ev.menuFilled ? ' (Es ist schon eingetragen.)' : ''}</span></p>`;
   }
-  if (!data.courses.some((c) => c.name)) return '<p class="muted">Noch kein Menü eingetragen.</p>';
+  if (!hasMenu(data.courses)) return '<p class="muted">Noch kein Menü eingetragen.</p>';
   return menuCard();
 }
 
-function menuCard() {
-  return `<div class="menu-card">${['vor', 'haupt', 'nach'].map((kind) => {
-    const x = data.courses.find((c) => c.kind === kind);
-    if (!x || !x.name) return '';
-    const idee = x.idea_id ? findIdee(x.idea_id) : null;
-    return `
-      <div class="menu-course">
-        <p class="menu-kind">${GANG[kind]}</p>
-        <p class="menu-name">${esc(x.name)}</p>
-        ${idee?.orig ? `<p class="menu-orig">${esc(idee.orig)}</p>` : ''}
-        ${x.note ? `<p class="menu-note">${linkify(x.note)}</p>` : ''}
-        ${x.kids_note ? `<p class="menu-kids">Für die Kinder: ${linkify(x.kids_note)}</p>` : ''}
-      </div>`;
-  }).filter(Boolean).join('<div class="menu-sep" aria-hidden="true">✦</div>')}</div>`;
-}
+const menuCard = () => menuCardHtml(data.courses);
 
 // ---------- Musik ----------
 // Kein Spotify-Login in der App: Ein Knopf öffnet direkt die Spotify-App,
@@ -222,11 +282,10 @@ function wire(view, ev, round, reload) {
   });
 
   const form = view.querySelector('[data-form=menu]');
+  if (form) wireMenuForm(form, ev, round);
   if (form) form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const f = Object.fromEntries(new FormData(form).entries());
-    const courses = ['vor', 'haupt', 'nach'].map((kind) => ({ kind, name: f[`${kind}-name`], note: f[`${kind}-note`], kids_note: f[`${kind}-kids`], idea_id: f[`${kind}-idea`] || null }));
-    if (await guard(() => api.saveCourses(ev.id, courses))) { toast('Menü gespeichert'); if (ev.past) reload(); }
+    if (await guard(() => api.saveCourses(ev.id, readMenuForm(form)))) { toast('Menü gespeichert'); if (ev.past) reload(); }
   });
 
   on('[data-act=edit-menu]', (e) => {
@@ -243,10 +302,7 @@ function wire(view, ev, round, reload) {
       });
       if (r?.value !== 'yes') return;
       // Vorher speichern, falls noch etwas getippt wurde
-      if (form) {
-        const f = Object.fromEntries(new FormData(form).entries());
-        await guard(() => api.saveCourses(ev.id, ['vor', 'haupt', 'nach'].map((kind) => ({ kind, name: f[`${kind}-name`], note: f[`${kind}-note`], kids_note: f[`${kind}-kids`], idea_id: f[`${kind}-idea`] || null }))));
-      }
+      if (form) await guard(() => api.saveCourses(ev.id, readMenuForm(form)));
     }
     await guard(() => api.setReleased(ev.id, !ev.released));
     if (!ev.released) toast('Menü freigegeben – guten Appetit!');

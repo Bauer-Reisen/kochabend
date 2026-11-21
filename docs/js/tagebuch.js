@@ -1,11 +1,12 @@
 // Das schöne Tagebuch: Titelseite mit allen Ländern, je Land ein Kapitel mit seinen Abenden.
 // Nur zum Anschauen – gesammelt wird auf den Abend-Seiten.
-import * as api from './api.js?v=0.3.6';
-import { esc } from './ui.js?v=0.3.6';
-import { ctx, personName, coupleName, fmtDate, todayIso, kidsOf, agesText } from './ctx.js?v=0.3.6';
-import { kueche, GANG, findIdee } from './kuechen.js?v=0.3.6';
-import { ornament } from './ornament.js?v=0.3.6';
-import { musicLabel } from './evening.js?v=0.3.6';
+import * as api from './api.js?v=0.4.0';
+import { esc } from './ui.js?v=0.4.0';
+import { ctx, personName, coupleName, fmtDate, todayIso, kidsOf, agesText } from './ctx.js?v=0.4.0';
+import { kueche } from './kuechen.js?v=0.4.0';
+import { menuCardHtml } from './menu.js?v=0.4.0';
+import { ornament } from './ornament.js?v=0.4.0';
+import { musicLabel } from './evening.js?v=0.4.0';
 
 const year = (iso) => (iso ? iso.slice(0, 4) : '');
 // leichte, aber feste Schräglage je Foto (sieht bei jedem Öffnen gleich aus)
@@ -104,16 +105,7 @@ function eveningPage(d, idx) {
           <img src="${api.photoUrl(cover.big)}" alt="" loading="lazy" decoding="async">
         </button>` : ''}
 
-      ${hasCourses ? `
-        <div class="menu-card diary-menu">
-          <p class="menu-title">Menü</p>
-          ${['vor', 'haupt', 'nach'].map((kind) => {
-            const x = d.courses.find((c) => c.kind === kind);
-            if (!x || !x.name) return '';
-            const idee = x.idea_id ? findIdee(x.idea_id) : null;
-            return `<div class="menu-course"><p class="menu-kind">${GANG[kind]}</p><p class="menu-name">${esc(x.name)}</p>${idee?.orig ? `<p class="menu-orig">${esc(idee.orig)}</p>` : ''}${x.kids_note ? `<p class="menu-kids">Für die Kinder: ${esc(x.kids_note)}</p>` : ''}</div>`;
-          }).filter(Boolean).join('<div class="menu-sep" aria-hidden="true">✦</div>')}
-        </div>`
+      ${hasCourses ? menuCardHtml(d.courses, { notes: false, title: 'Menü' })
         : upcoming ? `<p class="secret">${ev.menuFilled && !ev.menuOpen ? '🤫 Das Menü ist noch geheim.' : 'Dieser Abend kommt noch.'}</p>` : ''}
 
       ${d.quotes.length ? `

@@ -11,7 +11,7 @@ const MAX_PHOTOS_PER_DAY = 400; // Bremse gegen versehentliches Massen-Hochladen
 const MAX_BIG = 3_000_000;     // Bytes je großes Foto (die App schickt ca. 300 KB)
 const MAX_SMALL = 400_000;
 const MUSIC_HOSTS = ['open.spotify.com', 'spotify.link', 'music.youtube.com', 'www.youtube.com', 'youtube.com', 'youtu.be', 'music.apple.com'];
-const KINDS = ['vor', 'haupt', 'nach'];
+const KINDS = ['apero', 'vor', 'zwischen', 'haupt', 'nach', 'absacker'];
 
 export default {
   async fetch(request, env) {
@@ -121,7 +121,7 @@ export default {
         if (!action && method === 'GET') {
           const menuOpen = isHost || ev.released === 1 || (ev.date && ev.date < today());
           const courses = menuOpen
-            ? await all('SELECT kind, name, note, kids_note, idea_id, updated_by FROM courses WHERE evening_id = ?', ev.id)
+            ? await all('SELECT kind, pos, name, note, kids_note, idea_id, updated_by FROM courses WHERE evening_id = ? ORDER BY pos', ev.id)
             : [];
           const filled = (await one("SELECT COUNT(*) AS n FROM courses WHERE evening_id = ? AND name <> ''", ev.id)).n;
           const photos = await all(`
@@ -151,14 +151,32 @@ export default {
           const body = await request.json();
           const now = Date.now();
           const stmts = [];
-          for (const c of body.courses || []) {
-            if (!KINDS.includes(c.kind)) continue;
-            stmts.push(db.prepare(`
-              INSERT INTO courses (evening_id, kind, name, note, kids_note, idea_id, updated_by, updated)
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-              ON CONFLICT (evening_id, kind) DO UPDATE SET name = excluded.name, note = excluded.note,
-                kids_note = excluded.kids_note, idea_id = excluded.idea_id, updated_by = excluded.updated_by, updated = excluded.updated`)
-              .bind(ev.id, c.kind, clip(c.name, 120), clip(c.note, 2000), clip(c.kids_note, 1000), c.idea_id ? clip(c.idea_id, 60) : null, me.id, now));
+          if (body.full) {
+            // Ganzes Menü ersetzen: mehrere Gerichte je Gang, Reihenfolge = pos
+            stmts.push(db.prepare('DELETE FROM courses WHERE evening_id = ?').bind(ev.id));
+            const pos = {};
+            for (const c of (body.courses || []).slice(0, 80)) {
+              if (!KINDS.includes(c.kind)) continue;
+              const name = clip(c.name, 120).trim();
+              const kids = clip(c.kids_note, 1000).trim();
+              if (!name && !kids) continue;
+              const p = (pos[c.kind] = (pos[c.kind] ?? -1) + 1);
+              stmts.push(db.prepare(`
+                INSERT INTO courses (evening_id, kind, pos, name, note, kids_note, idea_id, updated_by, updated)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+                .bind(ev.id, c.kind, p, name, clip(c.note, 2000), p === 0 ? kids : '', c.idea_id ? clip(c.idea_id, 60) : null, me.id, now));
+            }
+          } else {
+            // Ältere App-Version: nur das erste Gericht je Gang ändern, weitere bleiben stehen
+            for (const c of body.courses || []) {
+              if (!KINDS.includes(c.kind)) continue;
+              stmts.push(db.prepare(`
+                INSERT INTO courses (evening_id, kind, pos, name, note, kids_note, idea_id, updated_by, updated)
+                VALUES (?, ?, 0, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT (evening_id, kind, pos) DO UPDATE SET name = excluded.name, note = excluded.note,
+                  kids_note = excluded.kids_note, idea_id = excluded.idea_id, updated_by = excluded.updated_by, updated = excluded.updated`)
+                .bind(ev.id, c.kind, clip(c.name, 120), clip(c.note, 2000), clip(c.kids_note, 1000), c.idea_id ? clip(c.idea_id, 60) : null, me.id, now));
+            }
           }
           if (stmts.length) await db.batch(stmts);
           return reply(200, { ok: true });

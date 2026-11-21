@@ -189,3 +189,15 @@ body { min-height: 0; display: flex; flex-direction: column; }
 .scroller { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior-y: contain; -webkit-overflow-scrolling: touch; }
 .tabbar { position: relative; flex: none; }
 body.has-tabs .view { padding-bottom: 32px; }
+
+/* Menü: mehrere Gerichte je Gang (0.4.0) */
+.menu-form .dish { padding: 6px 0; border-bottom: 1px dashed var(--line); }
+.menu-form .dish:last-child { border-bottom: 0; }
+.dish-top { display: flex; gap: 4px; align-items: center; }
+.dish-top input { flex: 1; min-width: 0; }
+.dish-btn { flex: none; width: 34px; height: 40px; margin-top: 6px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper-2, transparent); color: var(--ink-soft); font: inherit; cursor: pointer; padding: 0; }
+.dish:first-child [data-dish=up], .dish:last-child [data-dish=down] { opacity: .3; }
+.menu-form [data-f=kids] { margin-top: 4px; }
+.add-course { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 0 0 14px; }
+.add-course .chip { font: inherit; font-size: .9rem; border: 1px dashed var(--line); border-radius: 999px; background: var(--card); color: var(--accent); padding: 7px 12px; cursor: pointer; }
+.menu-dish + .menu-dish { margin-top: .55em; }

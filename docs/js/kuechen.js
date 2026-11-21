@@ -85,7 +85,10 @@ export const KUECHEN = {
   usa:        { name: 'USA',        orig: 'United States', farben: ['#24366e', '#f4efe3', '#b3303a'], musik: 'American Classics' },
 };
 
-export const GANG = { vor: 'Vorspeise', haupt: 'Hauptspeise', nach: 'Nachspeise' };
+export const GANG = { apero: 'Aperitif', vor: 'Vorspeise', zwischen: 'Zwischengang', haupt: 'Hauptspeise', nach: 'Nachspeise', absacker: 'Absacker & Kaffee' };
+// Reihenfolge der Gänge. Immer da: Vorspeise, Haupt, Nach. Die anderen kommen per „+ Gang" dazu.
+export const GAENGE = ['apero', 'vor', 'zwischen', 'haupt', 'nach', 'absacker'];
+export const GRUND_GAENGE = ['vor', 'haupt', 'nach'];
 
 export const kueche = (id) => KUECHEN[id] || null;
 export const findIdee = (id) => {

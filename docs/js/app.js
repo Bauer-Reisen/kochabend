@@ -1,20 +1,20 @@
 // Einstieg der App: Code eingeben → Name wählen → Seiten (Startseite, Abend, Ideen, Einsortieren).
-import { VERSION } from './config.js?v=0.3.6';
-import { store, login, loggedIn, logout, getPeople, getState, ApiError } from './api.js?v=0.3.6';
-import { esc, dialog, toast } from './ui.js?v=0.3.6';
-import { runTour } from './tour.js?v=0.3.6';
-import { unseen, showNews, NEWS } from './news.js?v=0.3.6';
-import { ctx, me } from './ctx.js?v=0.3.6';
-import { ornament } from './ornament.js?v=0.3.6';
-import { renderHome } from './home.js?v=0.3.6';
-import { renderEvening } from './evening.js?v=0.3.6';
-import { renderIdeas } from './ideas.js?v=0.3.6';
-import { renderSort } from './sort.js?v=0.3.6';
-import { renderMore } from './mehr.js?v=0.3.6';
-import { renderDates } from './termine.js?v=0.3.6';
-import { renderTabs, hideTabs } from './tabs.js?v=0.3.6';
-import { renderBook, renderChapter } from './tagebuch.js?v=0.3.6';
-import { qAll, onQueueChange, flush } from './photos.js?v=0.3.6';
+import { VERSION } from './config.js?v=0.4.0';
+import { store, login, loggedIn, logout, getPeople, getState, ApiError } from './api.js?v=0.4.0';
+import { esc, dialog, toast } from './ui.js?v=0.4.0';
+import { runTour } from './tour.js?v=0.4.0';
+import { unseen, showNews, NEWS } from './news.js?v=0.4.0';
+import { ctx, me } from './ctx.js?v=0.4.0';
+import { ornament } from './ornament.js?v=0.4.0';
+import { renderHome } from './home.js?v=0.4.0';
+import { renderEvening } from './evening.js?v=0.4.0';
+import { renderIdeas } from './ideas.js?v=0.4.0';
+import { renderSort } from './sort.js?v=0.4.0';
+import { renderMore } from './mehr.js?v=0.4.0';
+import { renderDates } from './termine.js?v=0.4.0';
+import { renderTabs, hideTabs } from './tabs.js?v=0.4.0';
+import { renderBook, renderChapter } from './tagebuch.js?v=0.4.0';
+import { qAll, onQueueChange, flush } from './photos.js?v=0.4.0';
 
 const view = document.getElementById('view');
 const scroller = document.getElementById('scroller'); // nur dieser Bereich scrollt (fester Rahmen)

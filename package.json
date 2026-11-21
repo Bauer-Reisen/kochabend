@@ -1,6 +1,6 @@
 {
   "name": "kochabend-app",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "private": true,
   "description": "Kochabend-Tagebuch für drei Paare",
   "type": "module",
@@ -17,6 +17,7 @@
     "@fontsource/caveat": "^5.3.0",
     "@fontsource/fraunces": "^5.3.0",
     "@fontsource/lora": "^5.3.0",
+    "qrcode": "^1.5.4",
     "wrangler": "^4.162.0"
   },
   "allowScripts": {

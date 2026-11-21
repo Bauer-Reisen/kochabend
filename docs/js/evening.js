@@ -1,10 +1,10 @@
 // Seite eines Abends: Menü, Kinder, Fotos, Sprüche, Eindrücke.
-import * as api from './api.js?v=0.4.0';
-import { esc, dialog, toast } from './ui.js?v=0.4.0';
-import { ctx, me, personName, coupleName, kidsOf, agesText, fmtDate, eveningForTime, roundOf } from './ctx.js?v=0.4.0';
-import { kueche, GANG, GAENGE, GRUND_GAENGE } from './kuechen.js?v=0.4.0';
-import { groupMenu, flatMenu, menuCardHtml, hasMenu, linkify } from './menu.js?v=0.4.0';
-import { addPhotos, readTakenTime, qAll, onQueueChange } from './photos.js?v=0.4.0';
+import * as api from './api.js?v=0.4.1';
+import { esc, dialog, toast } from './ui.js?v=0.4.1';
+import { ctx, me, personName, coupleName, kidsOf, agesText, fmtDate, eveningForTime, roundOf } from './ctx.js?v=0.4.1';
+import { kueche, GANG, GAENGE, GRUND_GAENGE } from './kuechen.js?v=0.4.1';
+import { groupMenu, flatMenu, menuCardHtml, hasMenu, linkify } from './menu.js?v=0.4.1';
+import { addPhotos, readTakenTime, qAll, onQueueChange } from './photos.js?v=0.4.1';
 
 
 let data = null;

@@ -1,9 +1,15 @@
 // „Was ist neu?" – nach einem Update einmal, wenn man die App wieder öffnet.
 // Wer die App neu hat, bekommt stattdessen den Rundgang und sieht die alten Neuigkeiten nicht.
 // Neueste zuerst; nur Änderungen, die man sieht und kennen sollte (keine Reparaturen).
-import { dialog } from './ui.js?v=0.4.0';
+import { dialog } from './ui.js?v=0.4.1';
 
 export const NEWS = [
+  {
+    v: '0.4.1', title: 'App weitergeben',
+    items: [
+      'Unter <strong>Mehr</strong> gibt es jetzt einen <strong>QR-Code</strong> und den Knopf <strong>„Link teilen"</strong> – so kommen die anderen ganz leicht an die App. Den Code sagt ihr weiterhin persönlich.',
+    ],
+  },
   {
     v: '0.4.0', title: 'Menü so, wie ihr kocht',
     items: [

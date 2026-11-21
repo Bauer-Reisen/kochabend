@@ -1,7 +1,7 @@
 // Menü: mehrere Gerichte je Gang, zusätzliche Gänge (Aperitif, Zwischengang, Absacker).
 // Gemeinsam genutzt von Abend-Seite, Tagebuch und Ideen.
-import { esc } from './ui.js?v=0.4.0';
-import { GANG, GAENGE, findIdee } from './kuechen.js?v=0.4.0';
+import { esc } from './ui.js?v=0.4.1';
+import { GANG, GAENGE, findIdee } from './kuechen.js?v=0.4.1';
 
 export const linkify = (s) => esc(s).replace(/https?:\/\/[^\s<]+/g, (u) => `<a href="${u}" target="_blank" rel="noopener">${u.length > 40 ? u.slice(0, 38) + '…' : u}</a>`).replace(/\n/g, '<br>');
 

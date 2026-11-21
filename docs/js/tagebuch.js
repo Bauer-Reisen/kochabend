@@ -1,12 +1,12 @@
 // Das schöne Tagebuch: Titelseite mit allen Ländern, je Land ein Kapitel mit seinen Abenden.
 // Nur zum Anschauen – gesammelt wird auf den Abend-Seiten.
-import * as api from './api.js?v=0.4.0';
-import { esc } from './ui.js?v=0.4.0';
-import { ctx, personName, coupleName, fmtDate, todayIso, kidsOf, agesText } from './ctx.js?v=0.4.0';
-import { kueche } from './kuechen.js?v=0.4.0';
-import { menuCardHtml } from './menu.js?v=0.4.0';
-import { ornament } from './ornament.js?v=0.4.0';
-import { musicLabel } from './evening.js?v=0.4.0';
+import * as api from './api.js?v=0.4.1';
+import { esc } from './ui.js?v=0.4.1';
+import { ctx, personName, coupleName, fmtDate, todayIso, kidsOf, agesText } from './ctx.js?v=0.4.1';
+import { kueche } from './kuechen.js?v=0.4.1';
+import { menuCardHtml } from './menu.js?v=0.4.1';
+import { ornament } from './ornament.js?v=0.4.1';
+import { musicLabel } from './evening.js?v=0.4.1';
 
 const year = (iso) => (iso ? iso.slice(0, 4) : '');
 // leichte, aber feste Schräglage je Foto (sieht bei jedem Öffnen gleich aus)
